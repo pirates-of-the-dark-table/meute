@@ -4,6 +4,13 @@
   <head>
     <title>Backbone.js</title>
     <link href="css/todos.css" media="all" rel="stylesheet" type="text/css"/>
+    <script src="../syncer/include.js"></script>
+    <script>
+      function onLoad() {
+        syncer.display('remotestorage-connect', ['contacts'], '../syncer/', function(e) {
+        });
+      }
+    </script>
     <script src="js/json2.js"></script>
     <script src="js/jquery-1.6.4.min.js"></script>
     <script src="js/underscore-1.1.6.js"></script>
@@ -12,8 +19,8 @@
     <script src="js/todos.js"></script>
   </head>
 
-  <body>
-
+  <body onload="onLoad();">
+<div id="remotestorage-connect"></div>
     <!-- Todo App Interface -->
 
     <div id="todoapp">
