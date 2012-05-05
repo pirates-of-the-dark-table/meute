@@ -3,14 +3,20 @@ define([
   'jquery',
   'underscore',
   'backbone',
-], function($, _, Backbone, contactListTemplate){
+  'text!templates/contact/listItem.html'
+], function($, _, Backbone, template){
 
-  var contactCollectionView = Backbone.View.extend({
-    el: '#content',
+  var View = Backbone.View.extend({
+  
+	  tagName: 'li',
+
+	  template: _.template(template),
+
     render: function(){
-      this.$el.html(contactListTemplate);
-			
+      this.$el.html(this.template(this.model.toJSON()));
+	    return this;
     }
   });
-  return new contactCollectionView;
+  
+	return View;
 });
