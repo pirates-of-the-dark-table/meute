@@ -1,0 +1,107 @@
+{
+  "SOME_ID": {
+    "firstName": "Martin",
+    "lastName": "Stadler",
+    "nickName": "xMartin",
+    "mailto": [
+      {
+        "address": "martin@siarp.de",
+        "type": "private"
+      },
+      {
+        "address": "martin.stadler@siarp.de",
+        "type": "work"
+      }
+    ],
+    "irc": [
+      {
+        "address": "xMartin@freenode.net",
+        "type": "unhosted"
+      },
+      {
+        "address": "Standart@freenode.net",
+        "type": "Plone"
+      }
+    ],
+    "phone": [
+      {
+        "number": "+4930-111111",
+        "type": "home"
+      },
+      {
+        "number": "+401781974272",
+        "type": "mobile"
+      }
+    ]
+  },
+  "SOME_ID2": {
+    "firstName": "Martin",
+    "lastName": "Stadler",
+    "nickName": "xMartin",
+    "mailto": [
+      {
+        "address": "martin@siarp.de",
+        "type": "private"
+      },
+      {
+        "address": "martin.stadler@siarp.de",
+        "type": "work"
+      }
+    ],
+    "irc": [
+      {
+        "address": "xMartin@freenode.net",
+        "type": "unhosted"
+      },
+      {
+        "address": "Standart@freenode.net",
+        "type": "Plone"
+      }
+    ],
+    "phone": [
+      {
+        "number": "+4930-111111",
+        "type": "home"
+      },
+      {
+        "number": "+401781974272",
+        "type": "mobile"
+      }
+    ]
+  },
+  "SOME_ID1": {
+    "firstName": "Martin",
+    "lastName": "Stadler",
+    "nickName": "xMartin",
+    "mailto": [
+      {
+        "address": "martin@siarp.de",
+        "type": "private"
+      },
+      {
+        "address": "martin.stadler@siarp.de",
+        "type": "work"
+      }
+    ],
+    "irc": [
+      {
+        "address": "xMartin@freenode.net",
+        "type": "unhosted"
+      },
+      {
+        "address": "Standart@freenode.net",
+        "type": "Plone"
+      }
+    ],
+    "phone": [
+      {
+        "number": "+4930-111111",
+        "type": "home"
+      },
+      {
+        "number": "+401781974272",
+        "type": "mobile"
+      }
+    ]
+  }
+}
