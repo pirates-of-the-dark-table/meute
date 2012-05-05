@@ -362,7 +362,7 @@
         libDir += '/'
       }
       document.getElementById(connectElement).innerHTML =
-        '<div id="connect-div" style="display:none"><input id="remotestorage-useraddress" type="text" placeholder="you@remotestorage" autofocus />'
+        '<link href="'+libDir+'remoteStorage.css" rel="stylesheet"><div id="connect-div" style="display:none"><input id="remotestorage-useraddress" type="text" placeholder="you@remotestorage" autofocus />'
         +'<input id="remotestorage-status" type="submit" value="loading &hellip;" disabled />'
         +'<img id="remotestorage-icon" class="remotestorage-loading" src="'+libDir+'remoteStorage-icon.png" />'
         +'<span id="remotestorage-disconnect">Disconnect <strong></strong></span>'
