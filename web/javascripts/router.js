@@ -32,15 +32,13 @@ define([
 			}
 			
 			var contacts = new ContactCollection();
-			
-			contacts.add([
-			  {name: "Michael"},
-			  {name: "Patrick"},
-			  {name: "Tobias"},			
-			]);
+
+			// _.each(modelsData, function(contact) {
+			// 	contacts.add(contact);
+			// });
 			
 			// contacts.models = [new ContactModel({name: 'contact 1'}), new ContactModel({name: 'contact 2'}), new ContactModel({name: 'contact 3'})];
-			// contacts.models = modelsData;
+			contacts.models = modelsData;
 
 			var view = new ContactListView({collection: contacts});
 			view.render();
