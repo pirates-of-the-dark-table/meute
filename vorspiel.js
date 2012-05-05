@@ -1,14 +1,12 @@
 var addressBook = {
   0: {
-    mailto: {
-      work: 'michiel@unhosted.org'
+    email: {
+      work: ['michiel@unhosted.org']
     },
     irc: {
-      0: 'irc:michielbdejong@freenode.net'
+      preferred: ['irc:michielbdejong@freenode.net']
     },
-    attr: {
-      firstName: 'Michiel',
-      lastName: 'de Jong'
+    fn: 'Michiel de Jong'
     }
   }
 };
