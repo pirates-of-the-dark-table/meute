@@ -4,9 +4,9 @@ define([
 	'underscore',
 	'backbone',
   'views/contact/list',
-  'collections/contacts',
-  'models/contact'
-], function($, _, Backbone, MainHomeView, ContactModel){
+  'models/contact',
+  'collections/contacts'
+], function($, _, Backbone, ContactListView, ContactModel, ContactCollection){
   var AppRouter = Backbone.Router.extend({
     routes: {
       'contact/:id': 'showContactAction',
@@ -18,7 +18,10 @@ define([
     },
 
     defaultAction: function(){
-			
+			var contacts = new ContactCollection();
+			contacts.models = [new ContactModel({name: 'contact 1'}), new ContactModel({name: 'contact 2'}), new ContactModel({name: 'contact 3'})];
+			var view = new ContactListView({collection: contacts});
+			view.render();
     },
 		
   });

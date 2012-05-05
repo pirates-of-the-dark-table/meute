@@ -4,15 +4,20 @@ define([
   'underscore',
   'backbone',
   'text!templates/contact/list.html'
-], function($, _, Backbone, mainHomeTemplate){
+], function($, _, Backbone, contactListTemplate){
 
-  var contactCollectionView = Backbone.View.extend({
+  var contactListView = Backbone.View.extend({
     el: '#content',
     render: function(){
-      this.$el.html(contactCollectionTemplate);
+      
+			this.collection.each(function (model) {
+				console.log(model.get('name'));
+			})
+			
+			this.$el.html(contactListTemplate);
 			
 			
     }
   });
-  return new contactCollectionView;
+  return contactListView;
 });

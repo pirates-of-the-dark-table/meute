@@ -4,8 +4,8 @@ define([
 ], function(_, Backbone) {
   var ContactModel = Backbone.Model.extend({
 		defaults: {
-			name: null,
-	  },
+			name: null
+	  }
   });
   return ContactModel;
 });
