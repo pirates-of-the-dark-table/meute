@@ -1,19 +1,27 @@
 var addressBook = {
-  'mailto:michiel@unhosted.org': {
-    rel: 'work',
-    sameAs: ['irc:michielbdejong@freenode.net'],
+  0: {
+    mailto: {
+      work: 'michiel@unhosted.org'
+    },
+    irc: {
+      0: 'irc:michielbdejong@freenode.net'
+    },
     attr: {
       firstName: 'Michiel',
       lastName: 'de Jong'
     }
-  },
-  'irc:michiel@unhosted.org': {
-    sameAs: ['mailto:michiel@unhosted.org']
   }
 };
+
+var mailtoIndex = {
+  'michiel@unhosted.org': 0
+};
+var ircIndex = {
+  'michielbdejong': 0
+};
 var firstNameIndex = {
-  'Michiel': ['mailto:michiel@unhosted.org']
+  'Michiel': 0
 };
 var lastNameIndex = {
-  'de Jong': ['mailto:michiel@unhosted.org']
+  'de Jong': 0
 };
