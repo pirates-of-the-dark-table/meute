@@ -1,19 +1,63 @@
 var addressBook = {
-  'mailto:michiel@unhosted.org': {
-    rel: 'work',
-    sameAs: ['irc:michielbdejong@freenode.net'],
-    attr: {
-      firstName: 'Michiel',
-      lastName: 'de Jong'
+  0: {
+    email: {
+      work: ['michiel@unhosted.org']
+    },
+    irc: {
+      preferred: ['irc:michielbdejong@freenode.net']
+    },
+    fn: 'Michiel de Jong'
     }
-  },
-  'irc:michiel@unhosted.org': {
-    sameAs: ['mailto:michiel@unhosted.org']
   }
 };
+
+var mailtoIndex = {
+  'michiel@unhosted.org': [0]
+};
+var ircIndex = {
+  'michielbdejong': [0]
+};
 var firstNameIndex = {
-  'Michiel': ['mailto:michiel@unhosted.org']
+  'Michiel': [0]
 };
 var lastNameIndex = {
-  'de Jong': ['mailto:michiel@unhosted.org']
+  'de Jong': [0]
 };
+
+{
+  "SOME_ID": {
+    firstName: "Martin",
+    lastName: "Stadler",
+    nickName: "xMartin",
+    mailto: [
+      {
+        address: "martin@siarp.de",
+        type: "private"
+      },
+      {
+        address: "martin.stadler@siarp.de",
+        type: "work"
+      }
+    ],
+    irc: [
+      {
+        address: "xMartin@freenode.net",
+        type: "unhosted"
+      },
+      {
+        address: "Standart@freenode.net",
+        type: "Plone"
+      }
+    ],
+    phone: [
+      {
+        number: "+4930-111111",
+        type: "home"
+      },
+      {
+        number: "+401781974272",
+        type: "mobile"
+      }
+    ]
+  }
+}
