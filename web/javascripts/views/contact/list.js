@@ -3,18 +3,16 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'text!templates/contact/list.html',
   'views/contact/listItem'
-], function($, _, Backbone, template, ListItemView){
+], function($, _, Backbone, ListItemView){
 
   var contactListView = Backbone.View.extend({
 	
     el: '#content',
-	
-    template: _.template(template),
+		
+		tagName: 'ul',
     
 	  render: function(){
-      this.$el.html(this.template(/*this.model.toJSON()*/));
       this.collection.each(function (model) {
         this.addOne(model);
       }, this);
@@ -22,7 +20,7 @@ define([
 
     addOne: function(model){
       var listItemView = new ListItemView({model: model});
-      this.$('#contact-list').append(listItemView.render().el);
+      this.$el.append(listItemView.render().el);
     }
   });
   
