@@ -3,105 +3,133 @@
     "firstName": "Martin",
     "lastName": "Stadler",
     "nickName": "xMartin",
-    "mailto": [
-      {
-        "address": "martin@siarp.de",
-        "type": "private"
-      },
-      {
-        "address": "martin.stadler@siarp.de",
-        "type": "work"
-      }
-    ],
-    "irc": [
-      {
-        "address": "xMartin@freenode.net",
-        "type": "unhosted"
-      },
-      {
-        "address": "Standart@freenode.net",
-        "type": "Plone"
-      }
-    ],
-    "phone": [
-      {
-        "number": "+4930-111111",
-        "type": "home"
-      },
-      {
-        "number": "+401781974272",
-        "type": "mobile"
-      }
-    ]
+    "data": {
+      "email": [
+        {
+          "value": "martin@siarp.de",
+          "type": "private"
+        },
+        {
+          "value": "martin.stadler@siarp.de",
+          "type": "work"
+        }
+      ],
+      "irc": [
+        {
+          "value": "xMartin@freenode.net",
+          "type": "unhosted"
+        },
+        {
+          "value": "Standart@freenode.net",
+          "type": "Plone"
+        }
+      ],
+      "phone": [
+        {
+          "value": "+4930-111111",
+          "type": "home"
+        },
+        {
+          "value": "+401781974272",
+          "type": "mobile"
+        }
+      ]
+    }
+  },
+  "SOME_ID1": {
+    "firstName": "Tobias",
+    "lastName": "Kräntzer",
+    "data": {
+      "email": [
+        {
+          "value": "info@internetslum.org",
+          "type": "private"
+        }
+      ],
+      "phone": [
+        {
+          "value": "+4930-111111",
+          "type": "home"
+        },
+        {
+          "value": "+401781974272",
+          "type": "mobile"
+        }
+      ]
+    }
   },
   "SOME_ID2": {
     "firstName": "Martin",
     "lastName": "Stadler",
     "nickName": "xMartin",
-    "mailto": [
-      {
-        "address": "martin@siarp.de",
-        "type": "private"
-      },
-      {
-        "address": "martin.stadler@siarp.de",
-        "type": "work"
-      }
-    ],
-    "irc": [
-      {
-        "address": "xMartin@freenode.net",
-        "type": "unhosted"
-      },
-      {
-        "address": "Standart@freenode.net",
-        "type": "Plone"
-      }
-    ],
-    "phone": [
-      {
-        "number": "+4930-111111",
-        "type": "home"
-      },
-      {
-        "number": "+401781974272",
-        "type": "mobile"
-      }
-    ]
+    "data": {
+      "email": [
+        {
+          "value": "martin@siarp.de",
+          "type": "private"
+        },
+        {
+          "value": "martin.stadler@siarp.de",
+          "type": "work"
+        }
+      ],
+      "irc": [
+        {
+          "value": "xMartin@freenode.net",
+          "type": "unhosted"
+        },
+        {
+          "value": "Standart@freenode.net",
+          "type": "Plone"
+        }
+      ],
+      "phone": [
+        {
+          "value": "+4930-111111",
+          "type": "home"
+        },
+        {
+          "value": "+401781974272",
+          "type": "mobile"
+        }
+      ]
+    }
   },
-  "SOME_ID1": {
+  "SOME_ID3": {
     "firstName": "Martin",
     "lastName": "Stadler",
     "nickName": "xMartin",
-    "mailto": [
-      {
-        "address": "martin@siarp.de",
-        "type": "private"
-      },
-      {
-        "address": "martin.stadler@siarp.de",
-        "type": "work"
-      }
-    ],
-    "irc": [
-      {
-        "address": "xMartin@freenode.net",
-        "type": "unhosted"
-      },
-      {
-        "address": "Standart@freenode.net",
-        "type": "Plone"
-      }
-    ],
-    "phone": [
-      {
-        "number": "+4930-111111",
-        "type": "home"
-      },
-      {
-        "number": "+401781974272",
-        "type": "mobile"
-      }
-    ]
+    "data": {
+      "email": [
+        {
+          "value": "martin@siarp.de",
+          "type": "private"
+        },
+        {
+          "value": "martin.stadler@siarp.de",
+          "type": "work"
+        }
+      ],
+      "irc": [
+        {
+          "value": "xMartin@freenode.net",
+          "type": "unhosted"
+        },
+        {
+          "value": "Standart@freenode.net",
+          "type": "Plone"
+        }
+      ],
+      "phone": [
+        {
+          "value": "+4930-111111",
+          "type": "home"
+        },
+        {
+          "value": "+401781974272",
+          "type": "mobile"
+        }
+      ]
+    }
   }
 }
