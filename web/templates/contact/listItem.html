@@ -1,1 +1,7 @@
-<%= name %>
+<span><%= firstName %> <%= lastName %></span>
+<div class="collapsible">
+	„<%= nickName %>“
+	<ul>
+		<% _.each(mailto, function(email) { %> <li><%= email.address %></li> <% }); %>
+	</ul>
+</div>

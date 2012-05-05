@@ -5,8 +5,9 @@ define([
 	'backbone',
   'views/contact/list',
   'models/contact',
-  'collections/contacts'
-], function($, _, Backbone, ContactListView, ContactModel, ContactCollection){
+  'collections/contacts',
+  'text!../data.json'
+], function($, _, Backbone, ContactListView, ContactModel, ContactCollection, data){
   var AppRouter = Backbone.Router.extend({
     routes: {
       'contact/add': 'addContactAction',
@@ -23,6 +24,13 @@ define([
     },
 
     defaultAction: function(){
+			var dataObj = JSON.parse(data);
+			var modelsData = [];
+			for (var contactId in dataObj) {
+				dataObj[contactId].id = contactId;
+				modelsData.push(new ContactModel(dataObj[contactId]));
+			}
+			
 			var contacts = new ContactCollection();
 			
 			contacts.add([
@@ -32,6 +40,8 @@ define([
 			]);
 			
 			// contacts.models = [new ContactModel({name: 'contact 1'}), new ContactModel({name: 'contact 2'}), new ContactModel({name: 'contact 3'})];
+			// contacts.models = modelsData;
+
 			var view = new ContactListView({collection: contacts});
 			view.render();
     },
