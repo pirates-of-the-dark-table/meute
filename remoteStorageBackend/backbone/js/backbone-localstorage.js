@@ -16,7 +16,7 @@ function guid() {
 // with a meaningful name, like the name you'd give a table.
 var Store = function(name) {
   this.name = name;
-  var store = localStorage.getItem(this.name);
+  var store = syncer.getItem('contacts', this.name);
   this.data = (store && JSON.parse(store)) || {};
 };
 
@@ -24,8 +24,7 @@ _.extend(Store.prototype, {
 
   // Save the current state of the **Store** to *localStorage*.
   save: function() {
-    localStorage.setItem(this.name, JSON.stringify(this.data));
-    syncer.pushItem(this.name);
+    syncer.setItem('contacts', this.name, JSON.stringify(this.data));
   },
 
   // Add a model, giving it a (hopefully)-unique GUID, if it doesn't already
