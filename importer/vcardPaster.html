@@ -44,11 +44,21 @@
       }
       if(vcardObj.email) {
         for(rel in vcardObj.email) {
-        if(!emailIndex[vcardObj.email[rel]]) {
-          emailIndex[vcardObj.email[rel]]=[];
+          if(!emailIndex[vcardObj.email[rel]]) {
+            emailIndex[vcardObj.email[rel]]=[];
+          }
+          emailIndex[vcardObj.email[rel]].push(uuid);
         }
-        emailIndex[vcardObj.email[rel]].push(uuid);
       }
+      updateDom();
+    }
+    function updateDom() {
+      console.log('vcards:');
+      console.log(vcards);
+      console.log('emailIndex:');
+      console.log(emailIndex);
+      console.log('nameIndex:');
+      console.log(nameIndex);
     }
   </script>
 </head>
