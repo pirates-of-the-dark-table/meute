@@ -6,7 +6,7 @@ var addressBook = {
       firstName: 'Michiel',
       lastName: 'de Jong'
     }
-  }.
+  },
   'irc:michiel@unhosted.org': {
     sameAs: ['mailto:michiel@unhosted.org']
   }
