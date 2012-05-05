@@ -14,14 +14,14 @@ var addressBook = {
 };
 
 var mailtoIndex = {
-  'michiel@unhosted.org': 0
+  'michiel@unhosted.org': [0]
 };
 var ircIndex = {
-  'michielbdejong': 0
+  'michielbdejong': [0]
 };
 var firstNameIndex = {
-  'Michiel': 0
+  'Michiel': [0]
 };
 var lastNameIndex = {
-  'de Jong': 0
+  'de Jong': [0]
 };
