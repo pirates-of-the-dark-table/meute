@@ -7,10 +7,11 @@ define([
 	'views/import',
   'models/contact',
   'collections/contacts',
+	'vcards',
   'text!../data.json'
-], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection, data){
+], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection, vCardTransformer, data){
   
-	var views = {};
+	var contactsCollection;
 	
 	var AppRouter = Backbone.Router.extend({
     routes: {
@@ -30,7 +31,6 @@ define([
 
     defaultAction: function(){
 			this.showMain();
-			
 		},
 		
 		showMain: function(){
@@ -41,7 +41,7 @@ define([
 				modelsData.push(new ContactModel(dataObj[contactId]));
 			}
 			
-			var contacts = new ContactCollection();
+			var contacts = this.contactsCollection = contactsCollection = new ContactCollection();
 
 			// _.each(modelsData, function(contact) {
 			// 	contacts.add(contact);
@@ -50,22 +50,28 @@ define([
 			// contacts.models = [new ContactModel({name: 'contact 1'}), new ContactModel({name: 'contact 2'}), new ContactModel({name: 'contact 3'})];
 			contacts.models = modelsData;
 
-			if(!views.contactList){
-				views.contactList = new ContactListView({collection: contacts});
+			if(!this.contactListView){
+				this.contactListView = new ContactListView({collection: contacts});
 			}
-			views.contactList.render();
-			if(views.importView){
-			  views.importView.close();
+			this.contactListView.render();
+			
+			if(this.importView){
+			  this.importView.close();
 			}
     },
 		
     showImport: function(){
       this.showMain();
-			views.contactList.render();
-			if(!views.importView){
-				views.importView = new ImportView();
+			this.contactListView.render();
+			if(!this.importView){
+				this.importView = new ImportView();
+				this.importView.callback = this._importVcardData;
 			}
-			views.importView.render();
+			this.importView.render();
+		},
+		
+		_importVcardData: function(data){
+			vCardTransformer.toObjects(data, function(){console.log(data)});
 		}
 		
   });
