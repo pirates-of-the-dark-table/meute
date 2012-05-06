@@ -7,9 +7,8 @@ define([
 	'views/import',
   'models/contact',
   'collections/contacts',
-	'vcards',
-  'text!../data.json'
-], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection, vCardTransformer, data){
+	'vcards'
+], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection, vCardTransformer){
   
 	var contactsCollection;
 	
@@ -22,7 +21,7 @@ define([
     },
 
     initialize: function(){
-			var dataObj = JSON.parse(data);
+			var dataObj = {};
 			var modelsData = [];
 			for (var contactId in dataObj) {
 				dataObj[contactId].id = contactId;
