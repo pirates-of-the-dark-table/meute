@@ -21,19 +21,7 @@ define([
       '*actions': 'defaultAction'
     },
 
-    addContactAction: function(id){
-				
-    },
-
-    showContactAction: function(id){
-				
-    },
-
-    defaultAction: function(){
-			this.showMain();
-		},
-		
-		showMain: function(){
+    initialize: function(){
 			var dataObj = JSON.parse(data);
 			var modelsData = [];
 			for (var contactId in dataObj) {
@@ -50,23 +38,32 @@ define([
 			// contacts.models = [new ContactModel({name: 'contact 1'}), new ContactModel({name: 'contact 2'}), new ContactModel({name: 'contact 3'})];
 			contacts.models = modelsData;
 
-			if(!this.contactListView){
-				this.contactListView = new ContactListView({collection: contacts});
-			}
+			this.contactListView = new ContactListView({collection: contacts});
+			this.importView = new ImportView();
+			this.importView.callback = this._importVcardData;
+
+    },
+
+    addContactAction: function(id){
+				
+    },
+
+    showContactAction: function(id){
+				
+    },
+
+    defaultAction: function(){
+      this.showMain();
+    },
+
+		showMain: function(){
 			this.contactListView.render();
-			
-			if(this.importView){
-			  this.importView.close();
-			}
+			this.importView.close();
     },
 		
     showImport: function(){
       this.showMain();
 			this.contactListView.render();
-			if(!this.importView){
-				this.importView = new ImportView();
-				this.importView.callback = this._importVcardData;
-			}
 			this.importView.render();
 		},
 		
