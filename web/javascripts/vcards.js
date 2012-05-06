@@ -1,4 +1,4 @@
-define(['javascript/scripts/vcard.js'], function(){
+define(['javascripts/scripts/vcard.js'], function(){
   function toObjects(str, cbObj) {
     var arr = [];
     var parts = vcardsStr.split('BEGIN:VCARD');
