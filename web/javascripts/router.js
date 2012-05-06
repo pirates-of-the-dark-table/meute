@@ -4,14 +4,19 @@ define([
 	'underscore',
 	'backbone',
   'views/contact/list',
+	'views/import',
   'models/contact',
   'collections/contacts',
   'text!../data.json'
-], function($, _, Backbone, ContactListView, ContactModel, ContactCollection, data){
-  var AppRouter = Backbone.Router.extend({
+], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection, data){
+  
+	var views = {};
+	
+	var AppRouter = Backbone.Router.extend({
     routes: {
       'contact/add': 'addContactAction',
       'contact/:id': 'showContactAction',
+			'import': 'showImport',
       '*actions': 'defaultAction'
     },
 
@@ -24,6 +29,14 @@ define([
     },
 
     defaultAction: function(){
+			this.showMain();
+			
+			if(views.importView){
+				$(views.importView.el).hide();
+			}
+		},
+		
+		showMain: function(){
 			var dataObj = JSON.parse(data);
 			var modelsData = [];
 			for (var contactId in dataObj) {
@@ -40,9 +53,21 @@ define([
 			// contacts.models = [new ContactModel({name: 'contact 1'}), new ContactModel({name: 'contact 2'}), new ContactModel({name: 'contact 3'})];
 			contacts.models = modelsData;
 
-			var view = new ContactListView({collection: contacts});
-			view.render();
+			if(!views.contactList){
+				views.contactList = new ContactListView({collection: contacts});
+			}
+			views.contactList.render();
     },
+		
+		showImport: function(){
+			this.showMain();
+			
+			if(!views.importView){
+				views.importView = new ImportView();
+			}
+			$(views.importView.el).show();
+			views.importView.render();
+		}
 		
   });
   var initialize = function(){
