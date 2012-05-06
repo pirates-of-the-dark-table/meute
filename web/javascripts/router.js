@@ -70,6 +70,9 @@ define([
 			var models = [];
 			vCardTransformer.toObjects(data, function(data){models.push(vCardTransformer.toMeuteFormat(data))});
 			contactsCollection.add(models);
+			contactsCollection.models.forEach(function(model){
+				Backbone.sync("create", model, {success: function(){}});
+			});
 		}
 		
   });
