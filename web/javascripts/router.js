@@ -21,21 +21,9 @@ define([
     },
 
     initialize: function(){
-			var dataObj = {};
-			var modelsData = [];
-			for (var contactId in dataObj) {
-				dataObj[contactId].id = contactId;
-				modelsData.push(new ContactModel(dataObj[contactId]));
-			}
 			
 			var contacts = this.contactsCollection = contactsCollection = new ContactCollection();
-
-			// _.each(modelsData, function(contact) {
-			// 	contacts.add(contact);
-			// });
-			
-			// contacts.models = [new ContactModel({name: 'contact 1'}), new ContactModel({name: 'contact 2'}), new ContactModel({name: 'contact 3'})];
-			contacts.models = modelsData;
+			contacts.fetch();
 
 			this.contactListView = new ContactListView({collection: contacts});
 			this.importView = new ImportView();
@@ -71,7 +59,7 @@ define([
 			vCardTransformer.toObjects(data, function(data){models.push(vCardTransformer.toMeuteFormat(data))});
 			contactsCollection.add(models);
 			contactsCollection.models.forEach(function(model){
-				Backbone.sync("create", model, {success: function(){}});
+				Backbone.sync("create", model, {success: function(){console.log(arguments)}, error: function(){console.log(arguments)}});
 			});
 		}
 		

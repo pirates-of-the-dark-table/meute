@@ -12,13 +12,11 @@ function guid() {
    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 };
 
-var syncer = localStorage;
-
 // Our Store is represented by a single JS object in *localStorage*. Create it
 // with a meaningful name, like the name you'd give a table.
 var Store = function(name) {
   this.name = name;
-  var store = syncer.getItem('contacts', this.name);
+  var store = localStorage.getItem(this.name);
   this.data = (store && JSON.parse(store)) || {};
 };
 
@@ -26,7 +24,7 @@ _.extend(Store.prototype, {
 
   // Save the current state of the **Store** to *localStorage*.
   save: function() {
-    syncer.setItem('contacts', this.name, JSON.stringify(this.data));
+    localStorage.setItem(this.name, JSON.stringify(this.data));
   },
 
   // Add a model, giving it a (hopefully)-unique GUID, if it doesn't already
