@@ -71,7 +71,9 @@ define([
 		},
 		
 		_importVcardData: function(data){
-			vCardTransformer.toObjects(data, function(){console.log(data)});
+			var models = [];
+			vCardTransformer.toObjects(data, function(data){models.push(vCardTransformer.toMeuteFormat(data))});
+			contactsCollection.add(models);
 		}
 		
   });

@@ -12,6 +12,12 @@ define([
     el: '#contacts',
 	
     template: _.template(template),
+		
+		initialize: function(){
+			this.collection.on("add", function(model) {
+				this.addOne(model);
+			}, this);
+		},
     
 	  render: function(){
       this.$el.html(this.template(/*this.model.toJSON()*/));
