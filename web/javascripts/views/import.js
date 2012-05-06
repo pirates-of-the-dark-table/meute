@@ -27,7 +27,9 @@ define([
     },
 
     doImport: function(){
-			this.callback($('textarea', this.$el).attr('value'));
+			var form = $('textarea', this.$el);
+			this.callback(form.attr('value'));
+			form.attr('value', '');
 		}
 		
   });
