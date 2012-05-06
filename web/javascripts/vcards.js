@@ -32,7 +32,11 @@ define(['javascripts/scripts/vcard.js'], function(){
       meuteObj.nickName = nameParts[1];
       meuteObj.lastName = nameParts[2];
     } else if(nameParts.length > 1) {
+      meuteObj.nickName = '';
       meuteObj.lastName = nameParts[1];
+    } else {
+      meuteObj.nickName = '';
+      meuteObj.lastName = '';
     }
     meuteObj.data = {};
     for(var scheme in {'email':1, 'tel':1}) {
