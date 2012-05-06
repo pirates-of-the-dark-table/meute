@@ -4,21 +4,34 @@
   <meta charset="utf-8" />
   <title>Meute</title>
   <script data-main="javascripts/main" src="javascripts/libs/require/require-min.js"></script>
-  <link rel="stylesheet" href="stylesheets/style.css" />
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="stylesheets/style.css">
+	<style>
+		body {
+			padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+		}
+	</style>
 </head>
 <body>
-<div>
-  <h1>Meute</h1>
-  <div id=menu>
-    <ul>
-      <li><a href="#/import">Import</a></li>
-    </ul>
-  </div>
 
-  <div id="contacts">
-  </div>
-  <div id="import">
-  </div>
+<div>
+
+	<div id="menu" class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="brand" href="#">Meute</a>
+				<ul class="nav">
+					<li class="active">
+						<a href="#/import">Import</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+  <div id="contacts"></div>
+  <div id="import"></div>
+	
 </div>
 
 </body>

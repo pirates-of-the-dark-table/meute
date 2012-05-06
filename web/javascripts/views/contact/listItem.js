@@ -8,8 +8,6 @@ define([
 
   var View = Backbone.View.extend({
   
-	  tagName: 'li',
-
 	  template: _.template(template),
 		
 		events: {

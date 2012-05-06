@@ -1,14 +1,16 @@
-<span><%= firstName %> <%= lastName %></span>
-<div class="collapsible">
-  <% if(typeof nickName != "undefined") print('„' + nickName + '“'); %>
-  <% _.each(_.keys(data), function(type) { %>
-    <div>
-      <h3><%= type %></h3>
-		  <ul>
-		    <% _.each(data[type], function(item) { %>
-		      <li><%= item.value %></li>
-		    <% }); %>
-	    </ul>
-	  </div>
-	<% }); %>
-</div>
+<li>
+		<span><%= firstName %> <%= lastName %></span>
+		<div class="collapsible">
+			<% if(typeof nickName != "undefined") print('„' + nickName + '“'); %>
+			<% _.each(_.keys(data), function(type) { %>
+				<div>
+					<h3><%= type %></h3>
+					<ul>
+						<% _.each(data[type], function(item) { %>
+							<li><%= item.value %></li>
+						<% }); %>
+					</ul>
+				</div>
+			<% }); %>
+		</div>
+</li>
