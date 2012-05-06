@@ -1,5 +1,5 @@
 define(['javascripts/scripts/vcard.js'], function(){
-  function toObjects(str, cbObj) {
+  function toObjects(vcardsStr, cb) {
     var arr = [];
     var parts = vcardsStr.split('BEGIN:VCARD');
     for(var i =0; i<parts.length;i++) {
