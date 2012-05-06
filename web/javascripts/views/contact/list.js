@@ -9,7 +9,7 @@ define([
 
   var contactListView = Backbone.View.extend({
 	
-    el: '#content',
+    el: '#contacts',
 	
     template: _.template(template),
     

@@ -31,9 +31,6 @@ define([
     defaultAction: function(){
 			this.showMain();
 			
-			if(views.importView){
-				$(views.importView.el).hide();
-			}
 		},
 		
 		showMain: function(){
@@ -57,15 +54,17 @@ define([
 				views.contactList = new ContactListView({collection: contacts});
 			}
 			views.contactList.render();
+			if(views.importView){
+			  views.importView.close();
+			}
     },
 		
-		showImport: function(){
-			this.showMain();
-			
+    showImport: function(){
+      this.showMain();
+			views.contactList.render();
 			if(!views.importView){
 				views.importView = new ImportView();
 			}
-			$(views.importView.el).show();
 			views.importView.render();
 		}
 		
