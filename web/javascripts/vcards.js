@@ -1,5 +1,7 @@
 define(['javascripts/scripts/vcard.js'], function(){
   function toObjects(vcardsStr, cb) {
+    // HACK vcard lib should handle all kinds of line endings.
+    vcardsStr = vcardsStr.replace(/\r\n/g, '\n');
     var arr = [];
     var parts = vcardsStr.split('BEGIN:VCARD');
     for(var i =0; i<parts.length;i++) {
