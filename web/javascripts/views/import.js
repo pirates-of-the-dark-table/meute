@@ -27,9 +27,13 @@ define([
     },
 
     doImport: function(){
-			var form = $('textarea', this.$el);
-			this.callback(form.attr('value'));
-			form.attr('value', '');
+			var file = $('input[type=file]', this.$el)[0].files[0];
+			var fr = new FileReader();
+			fr.readAsText(file);
+			var cb = this.callback;
+			fr.onload = function(){
+				cb(fr.result);
+			};
 		}
 		
   });
