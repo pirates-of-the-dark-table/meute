@@ -9,7 +9,8 @@ require.config({
     underscore: 'libs/underscore/underscore-min',
     backbone: 'libs/backbone/backbone-optamd3-min',
     text: 'libs/require/text',
-    templates: '../templates'
+    templates: '../templates',
+    vcardjs: 'libs/vcard.min'
   }
 });
 
