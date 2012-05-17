@@ -1,16 +1,35 @@
-<li>
-		<span><%= firstName %> <%= lastName %></span>
-		<div class="collapsible">
-			<% if(typeof nickName != "undefined") print('„' + nickName + '“'); %>
-			<% _.each(_.keys(data), function(type) { %>
-				<div>
-					<h3><%= type %></h3>
-					<ul>
-						<% _.each(data[type], function(item) { %>
-							<li><%= item.value %></li>
-						<% }); %>
-					</ul>
-				</div>
-			<% }); %>
-		</div>
+<li class="vcard">
+  <div class="fn"><%= fn %></div>
+	<div class="collapsible vcard">
+
+    <% _.each(nickname, function(nick) { %>
+      <div class="nickname"><%= '„' + nick + '“' %></div>
+    <% }); %>
+
+    <% if(tel) { %>
+      <h3>Phone numbers</h3>
+      <ul>
+        <% _.each(tel, function(item) { %>
+          <li class="tel">
+            <span class="type"><%= item.type %>:&nbsp;</span>
+            <span class="value"><%= item.value %></span>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <% if(email) { %>
+      <h3>eMail addresses</h3>
+      <ul>
+        <% _.each(email, function(item) { %>
+          <li class="email">
+            <span class="type"><%= item.type %>:&nbsp;</span>
+            <span class="value"><%= item.value %></span>
+          </li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+  </div>
+
 </li>

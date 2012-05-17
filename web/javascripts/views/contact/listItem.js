@@ -11,7 +11,7 @@ define([
 	  template: _.template(template),
 		
 		events: {
-			'click span': 'expand'
+			'click .fn': 'expand'
 		},
 
     render: function(){

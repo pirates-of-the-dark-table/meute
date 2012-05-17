@@ -7,8 +7,8 @@ define([
 	'views/import',
   'models/contact',
   'collections/contacts',
-	'vcards'
-], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection, vCardTransformer){
+  'vcardjs'
+], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection){
   
 	var contactsCollection;
 	
@@ -56,7 +56,9 @@ define([
 		
 		_importVcardData: function(data){
 			var models = [];
-			vCardTransformer.toObjects(data, function(data){models.push(vCardTransformer.toMeuteFormat(data))});
+			VCF.parse(data, function(vcard) {
+          models.push(vcard.toJCard());
+      });
 			contactsCollection.add(models);
 			contactsCollection.models.forEach(function(model){
 				Backbone.sync("create", model, {success: function(){console.log(arguments)}, error: function(){console.log(arguments)}});
