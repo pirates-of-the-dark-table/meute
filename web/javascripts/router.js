@@ -6,12 +6,9 @@ define([
   'views/contact/list',
 	'views/import',
   'models/contact',
-  'collections/contacts',
-  'vcardjs'
+  'collections/contacts'
 ], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection){
-  
-	var contactsCollection;
-	
+
 	var AppRouter = Backbone.Router.extend({
     routes: {
       'contact/add': 'addContactAction',
@@ -22,12 +19,15 @@ define([
 
     initialize: function(){
 			
-			var contacts = this.contactsCollection = contactsCollection = new ContactCollection();
-			contacts.fetch();
+			this.contactCollection = new ContactCollection();
+			this.contactCollection.fetch();
 
-			this.contactListView = new ContactListView({collection: contacts});
+			this.contactListView = new ContactListView({collection: this.contactCollection});
 			this.importView = new ImportView();
-			this.importView.callback = this._importVcardData;
+		  this.importView.callback = _.bind(function(data) {
+					 this.contactCollection.addFromVCardData(data);
+
+			 }, this);
 
     },
 
@@ -53,17 +53,6 @@ define([
 			this.contactListView.render();
 			this.importView.render();
 		},
-		
-		_importVcardData: function(data){
-			var models = [];
-			VCF.parse(data, function(vcard) {
-          models.push(vcard.toJCard());
-      });
-			contactsCollection.add(models);
-			contactsCollection.models.forEach(function(model){
-				Backbone.sync("create", model, {success: function(){console.log(arguments)}, error: function(){console.log(arguments)}});
-			});
-		}
 		
   });
   var initialize = function(){

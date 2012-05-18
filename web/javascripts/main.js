@@ -10,7 +10,7 @@ require.config({
     backbone: 'libs/backbone/backbone-optamd3-min',
     text: 'libs/require/text',
     templates: '../templates',
-    vcardjs: 'libs/vcard.min'
+    vcardjs: 'libs/vcardjs.min'
   }
 });
 
