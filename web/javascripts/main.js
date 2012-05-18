@@ -8,6 +8,7 @@ require.config({
     jquery: 'libs/jquery/jquery-min',
     underscore: 'libs/underscore/underscore-min',
     backbone: 'libs/backbone/backbone-optamd3-min',
+    'backbone-localstorage': 'libs/backbone/backbone-localstorage',
     text: 'libs/require/text',
     templates: '../templates',
     vcardjs: 'libs/vcardjs.min'

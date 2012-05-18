@@ -7,8 +7,8 @@ define([
 
     var ContactCollection = Backbone.Collection.extend({
 		
-		    model: ContactModel,		
-		    localStorage: new Store("contacts-backbone"),
+		    model: ContactModel,
+        categoryName: 'contacts',
 
         addFromVCardData: function(data) {
             vCardJS.VCF.parse(data, function(vcard) {

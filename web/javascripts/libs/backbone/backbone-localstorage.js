@@ -1,84 +1,157 @@
 // A simple module to replace `Backbone.sync` with *localStorage*-based
-// persistence. Models are given GUIDS, and saved into a JSON object. Simple
-// as that.
+// persistence. Models are given GUIDS, and saved into JSON objects + a index.
+// Simple as that.
 
-// Generate four random hex digits.
-function S4() {
-   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-};
+define(
+    ['underscore', 'backbone'],
+    function(_, Backbone) {
 
-// Generate a pseudo-GUID by concatenating random hexadecimal.
-function guid() {
-   return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
-};
+        /**
+         * Helper functions
+         **/
 
-// Our Store is represented by a single JS object in *localStorage*. Create it
-// with a meaningful name, like the name you'd give a table.
-var Store = function(name) {
-  this.name = name;
-  var store = localStorage.getItem(this.name);
-  this.data = (store && JSON.parse(store)) || {};
-};
+        // Generate four random hex digits.
+        function S4() {
+            return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        };
 
-_.extend(Store.prototype, {
+        // Generate a pseudo-GUID by concatenating random hexadecimal.
+        function guid() {
+            return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+        };
 
-  // Save the current state of the **Store** to *localStorage*.
-  save: function() {
-    localStorage.setItem(this.name, JSON.stringify(this.data));
-  },
+        function buildKey(categoryName, id) {
+            return categoryName + '-' + id;
+        }
 
-  // Add a model, giving it a (hopefully)-unique GUID, if it doesn't already
-  // have an id of it's own.
-  create: function(model) {
-    if (!model.id) model.id = model.attributes.id = guid();
-    this.data[model.id] = model;
-    this.save();
-    return model;
-  },
+        function buildIndexKey(categoryName) {
+            return categoryName + '-index';
+        }
 
-  // Update a model by replacing its copy in `this.data`.
-  update: function(model) {
-    this.data[model.id] = model;
-    this.save();
-    return model;
-  },
+        function getIndex(categoryName) {
+            var data = localStorage.getItem(buildIndexKey(categoryName));
+            return data ? _.without(JSON.parse(data), null) : [];
+        }
 
-  // Retrieve a model from `this.data` by id.
-  find: function(model) {
-    return this.data[model.id];
-  },
+        function saveIndex(categoryName, index) {
+            localStorage.setItem(
+                buildIndexKey(categoryName),
+                JSON.stringify(index)
+            );
+        }
 
-  // Return the array of all models currently in storage.
-  findAll: function() {
-    return _.values(this.data);
-  },
+        function addToIndex(categoryName, model) {
+            var index = getIndex(categoryName);
+            index.push(model.id);
+            saveIndex(categoryName, index)
+        }
 
-  // Delete a model from `this.data`, returning it.
-  destroy: function(model) {
-    delete this.data[model.id];
-    this.save();
-    return model;
-  }
+        function removeFromIndex(categoryName, model) {
+            var index = getIndex(categoryname);
+            saveIndex(categoryName, _.without(index, model.id));
+        }
 
-});
+        function doSync(categoryName, method, model) {
+            switch (method) {
+            case "read":
 
-// Override `Backbone.sync` to use delegate to the model or collection's
-// *localStorage* property, which should be an instance of `Store`.
-Backbone.sync = function(method, model, options) {
+                var data;
 
-  var resp;
-  var store = model.localStorage || model.collection.localStorage;
+                if(model.id) {
+                    // read single item
+                    return JSON.parse(
+                        localStorage.getItem(buildKey(categoryName, model.id))
+                    );
+                } else {
+                    // read collection
+                    return _.map(getIndex(categoryName), function(id) {
+                        return JSON.parse(
+                            localStorage.getItem(buildKey(categoryName, id))
+                        );
+                    });
+                }
 
-  switch (method) {
-    case "read":    resp = model.id ? store.find(model) : store.findAll(); break;
-    case "create":  resp = store.create(model);                            break;
-    case "update":  resp = store.update(model);                            break;
-    case "delete":  resp = store.destroy(model);                           break;
-  }
+                break;
 
-  if (resp) {
-    options.success(resp);
-  } else {
-    options.error("Record not found");
-  }
-};
+            case "create":
+
+                if(! model.id) {
+                    model.id = guid();
+                }
+
+                addToIndex(categoryName, model);
+
+                // fall through!
+            case "update":
+
+                localStorage.setItem(
+                    buildKey(categoryName, model.id),
+                    JSON.stringify(model)
+                );
+
+                return model;
+                break;
+
+            case "delete":
+
+                removeFromIndex(categoryName, model);
+                localStorage.removeItem(buildKey(categoryName, model.id));
+
+                return model;
+                break;
+            }
+        }
+
+        /**
+         * Backbone extension
+         **/
+
+        Backbone._preLocalStorageSync = Backbone.sync;
+
+        _.extend(Backbone, {
+
+            // call Backbone.keepOriginalSync() to keep the original syncing method
+            // intact.
+            // Your callback will hence be called twice, once (the first time),
+            // when the data is in localStorage, then (possibly) again when the
+            // data ended up on server or whereever.
+            keepOriginalSync: function() {
+                this.afterSync = this._preLocalStorageSync;
+            },
+
+            // overridden Backbone.sync to store given model in localStorage.
+            sync: function(method, model, options) {
+
+                // determine categoryName based on model or collection setting.
+
+                var categoryName = model.categoryName ||
+                    model.collection.categoryName;
+
+                if(! (typeof(categoryName) == 'string')) {
+                    options.error(
+                        "categoryName neither set for model: ", model,
+                        "nor it's collection: ", model.collection,
+                        "Won't sync with localStorage."
+                    );
+                    return;
+                }
+
+                var response = doSync(categoryName, method, model);
+
+                if (response) {
+                    options.success(response);
+                } else {
+                    options.error("Record not found");
+                }
+
+                if(this.afterSync) {
+                    this.afterSync.apply(this, arguments);
+                }
+            }
+
+        });
+
+        return Backbone;
+    }
+);
+

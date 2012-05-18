@@ -2,7 +2,7 @@
 define([
   'jquery',
   'underscore',
-  'backbone',
+  'backbone-localstorage',
   'text!templates/contact/listItem.html'
 ], function($, _, Backbone, template){
 
