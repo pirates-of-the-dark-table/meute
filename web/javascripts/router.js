@@ -1,66 +1,84 @@
 
 define([
-  'jquery',
-	'underscore',
-	'backbone',
-  'views/contact/list',
-	'views/import',
-  'models/contact',
-  'collections/contacts'
-], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection){
+    'jquery',
+	  'underscore',
+	  'backbone',
+    'views/contact/list',
+	  'views/import',
+    'models/contact',
+    'collections/contacts',
+    'views/main/menu'
+], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection, MenuView){
 
-	var AppRouter = Backbone.Router.extend({
-    routes: {
-      'contact/add': 'addContactAction',
-      'contact/:id': 'showContactAction',
-			'import': 'showImport',
-      '*actions': 'defaultAction'
-    },
+	  var AppRouter = Backbone.Router.extend({
+        routes: {
+            'contact/add': 'addContactAction',
+            'contact/:id': 'showContactAction',
+			      'import': 'showImport',
+            '*actions': 'defaultAction'
+        },
 
-    initialize: function(){
-			
-			this.contactCollection = new ContactCollection();
-			this.contactCollection.fetch();
+        initialize: function(){
+			      
+			      this.contactCollection = new ContactCollection();
+			      this.contactCollection.fetch();
 
-			this.contactListView = new ContactListView({collection: this.contactCollection});
-			this.importView = new ImportView();
-		  this.importView.callback = _.bind(function(data) {
-					 this.contactCollection.addFromVCardData(data);
+            this.menuView = new MenuView({
+                collection: [
+                    { label: "Import", key: 'import' }
+                ]
+            });
 
-			 }, this);
 
-    },
+			      this.contactListView = new ContactListView({
+                collection: this.contactCollection
+            });
+			      this.importView = new ImportView();
+		        this.importView.callback = _.bind(function(data) {
+					      this.contactCollection.addFromVCardData(data);
 
-    addContactAction: function(id){
-				
-    },
+			      }, this);
 
-    showContactAction: function(id){
-				
-    },
+        },
 
-    defaultAction: function(){
-      this.showMain();
-    },
+        addContactAction: function(id){
+				    
+        },
 
-		showMain: function(){
-			this.contactListView.render();
-			this.importView.close();
-    },
-		
-    showImport: function(){
-      this.showMain();
-			this.contactListView.render();
-			this.importView.render();
-		},
-		
-  });
-  var initialize = function(){
-    var app_router = new AppRouter;
-		window.app_router = app_router;
-    Backbone.history.start();
-  };
-  return {
-    initialize: initialize
-  };
+        showContactAction: function(id){
+				    
+        },
+
+        defaultAction: function(){
+            this.showMain();
+        },
+
+		    showMain: function(){
+            this.menuView.render();
+			      this.contactListView.render();
+			      this.importView.close();
+        },
+
+        showMe: function() {
+            this.importView.close();
+            this.contactView = new ContactView({
+                //contact: 
+            });
+        },
+		    
+        showImport: function(){
+            this.showMain();
+            this.menuView.setActive('import');
+			      this.importView.render();
+		    },
+		    
+    });
+    var initialize = function(){
+        var app_router = new AppRouter;
+		    window.app_router = app_router;
+        Backbone.history.start();
+    };
+    return {
+        initialize: initialize
+    };
 });
