@@ -77,6 +77,8 @@ define(
 
                 if(! model.id) {
                     model.id = guid();
+                    // has to be set as well, so it is actually saved and later recovered.
+                    model.attributes.id = model.id;
                 }
 
                 addToIndex(categoryName, model);
