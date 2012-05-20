@@ -51,9 +51,9 @@ define([
             this.$('input[type="file"]').click();
         },
 
-        addFile: function(file) {
-            this.renderFile(file, i);
-            this.files[i] = file;
+        addFile: function(evt) {
+            var input = this.$('input[type=file]')[0];
+            this.addFiles(input.files);
         },
 
         addFiles: function(files) {
