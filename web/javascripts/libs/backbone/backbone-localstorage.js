@@ -47,7 +47,7 @@ define(
         }
 
         function removeFromIndex(categoryName, model) {
-            var index = getIndex(categoryname);
+            var index = getIndex(categoryName);
             saveIndex(categoryName, _.without(index, model.id));
         }
 
@@ -124,17 +124,19 @@ define(
             // overridden Backbone.sync to store given model in localStorage.
             sync: function(method, model, options) {
 
+                console.log('SYNC', method, model, options);
+
                 // determine categoryName based on model or collection setting.
 
                 var categoryName = model.categoryName ||
-                    model.collection.categoryName;
+                    (model.collection && model.collection.categoryName);
 
                 if(! (typeof(categoryName) == 'string')) {
-                    options.error(
-                        "categoryName neither set for model: ", model,
-                        "nor it's collection: ", model.collection,
-                        "Won't sync with localStorage."
-                    );
+                    options.error("categoryName neither set for model: " +
+                                  JSON.stringify(model) + 
+                                  "nor it's collection: " +
+                                  JSON.stringify(model.collection) + 
+                                  "Won't sync with localStorage.");
                     return;
                 }
 

@@ -12,10 +12,19 @@ define([
 
         addFromVCardData: function(data) {
             vCardJS.VCF.parse(data, function(vcard) {
-                this.create(vcard.toJCard());
+                var model = new this.model();
+                model.collection = this;
+                model.save(vcard.toJCard(), {
+                    success: _.bind(function() {
+                        console.log("SAVING SUCCESS", arguments);
+                        this.add(model);
+                    }, this),
+                    error: function() {
+                        console.log("SAVING FAILURE", arguments);
+                    }
+                });
             }, this);
         }
-        
 
 	  });
 

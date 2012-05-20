@@ -8,7 +8,7 @@ define([
 
         tagName: 'div',
 
-        el: $('#menu'),
+        el: $('<div id="menu">'),
 
         template: _.template(template),
 
@@ -17,16 +17,16 @@ define([
             this.$el.html(this.template({
                 items: this.collection
             }));
-            if(this.activeKey) {
-                this.setActive(this.activeKey);
-            }
+            this.rendered = true;
             return this;
         },
 
         setActive: function(key) {
             this.activeKey = key;
             this.$el.find('li.active').removeClass('active');
-            this.$el.find('li.' + key).addClass('active');
+            if(this.activeKey) {
+                this.$el.find('li.' + key).addClass('active');
+            }
         }
 		    
     });

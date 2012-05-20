@@ -1,35 +1,32 @@
-<li class="vcard">
-  <div class="fn"><%= fn %></div>
-	<div class="collapsible vcard">
+<div class="fn"><%= fn %></div>
+<ul class="emails">
+  <% _.each(email, function(item) { %>
+  <li class="email">
+    <span class="type"><%= item.type %>:&nbsp;</span>
+    <span title="<%= item.type %>" class="value"><%= item.value %></span>
+  </li>
+  <% }); %>
+</ul>
 
-    <% _.each(nickname, function(nick) { %>
-      <div class="nickname"><%= '„' + nick + '“' %></div>
+<div class="collapsible vcard">
+  <a href="#/contact/edit/<%= id %>">edit</a>
+  <% _.each(nickname, function(nick) { %>
+  <div class="nickname"><%= '„' + nick + '“' %></div>
+  <% }); %>
+
+  <% if(tel) { %>
+  <h3>Phone numbers</h3>
+  <ul>
+    <% _.each(tel, function(item) { %>
+    <li class="tel">
+      <span class="type"><%= item.type %>:&nbsp;</span>
+      <span title="<%= item.type %>" class="value"><%= item.value %></span>
+    </li>
     <% }); %>
+  </ul>
+  <% } %>
 
-    <% if(tel) { %>
-      <h3>Phone numbers</h3>
-      <ul>
-        <% _.each(tel, function(item) { %>
-          <li class="tel">
-            <span class="type"><%= item.type %>:&nbsp;</span>
-            <span class="value"><%= item.value %></span>
-          </li>
-        <% }); %>
-      </ul>
-    <% } %>
+  <% if(email) { %>
+  <% } %>
 
-    <% if(email) { %>
-      <h3>eMail addresses</h3>
-      <ul>
-        <% _.each(email, function(item) { %>
-          <li class="email">
-            <span class="type"><%= item.type %>:&nbsp;</span>
-            <span class="value"><%= item.value %></span>
-          </li>
-        <% }); %>
-      </ul>
-    <% } %>
-
-  </div>
-
-</li>
+</div>

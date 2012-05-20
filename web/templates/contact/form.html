@@ -1,0 +1,26 @@
+<form>
+  <h3><%= title %></h3>
+  <fieldset class="n">
+    <% if(! contact.n) { contact.n = {}; } %>
+    <div class="input">
+      <label for="n[given-name]">First name</label>
+      <input name="n[given-name]" type="text" value="<%= contact.n['given-name'] || '' %>">
+    </div>
+    <div class="input">
+      <label for="n[additional-name]">Middle name</label>
+      <input name="n[additional-name]" type="text" value="<%= contact.n['additional-name'] || '' %>">
+    </div>
+    <div class="input">
+      <label for="n[family-name]">Last name</label>
+      <input name="n[family-name]" type="text" value="<%= contact.n['family-name'] || '' %>">
+    </div>
+  </fieldset>
+  <div class="input">
+    <label for="fn">Formatted name</label>
+    <input name="fn" type="text" value="<%= contact.fn || '' %>" disabled="disabled">
+    <a href="#" class="customize-fn">customize</a>
+  </div>
+  <div class="input">
+    <input type="submit" value="Save">
+  </div>
+</form>

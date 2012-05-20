@@ -1,22 +1,43 @@
 
 define([
+    // support
     'jquery',
 	  'underscore',
 	  'backbone',
-    'views/contact/list',
-	  'views/import',
-    'models/contact',
+    // models
     'collections/contacts',
-    'views/main/menu'
-], function($, _, Backbone, ContactListView, ImportView, ContactModel, ContactCollection, MenuView){
+    'models/contact',
+    // views
+    'views/main/menu',
+    'views/contact/list',
+	  'views/contact/import',
+    'views/contact/form'
+], function(
+    // support
+    $, _, Backbone,
+    // models
+    ContactCollection, ContactModel,
+    // views
+    MenuView, ContactListView, ContactImportView, ContactFormView
+) {
 
 	  var AppRouter = Backbone.Router.extend({
+
+        /**
+         * ROUTES
+         **/
+
         routes: {
             'contact/add': 'addContactAction',
+            'contact/edit/:id': 'editContactAction',
+			      'contact/import': 'importContactAction',
             'contact/:id': 'showContactAction',
-			      'import': 'showImport',
             '*actions': 'defaultAction'
         },
+
+        /**
+         * SETUP
+         **/
 
         initialize: function(){
 			      
@@ -25,7 +46,8 @@ define([
 
             this.menuView = new MenuView({
                 collection: [
-                    { label: "Import", key: 'import' }
+                    { label: "New", key: 'new', route: 'contact/add' },
+                    { label: "Import", key: 'contact/import' }
                 ]
             });
 
@@ -33,44 +55,85 @@ define([
 			      this.contactListView = new ContactListView({
                 collection: this.contactCollection
             });
-			      this.importView = new ImportView();
-		        this.importView.callback = _.bind(function(data) {
-					      this.contactCollection.addFromVCardData(data);
-
-			      }, this);
 
         },
 
-        addContactAction: function(id){
-				    
-        },
-
-        showContactAction: function(id){
-				    
-        },
+        /**
+         * ACTIONS
+         **/
 
         defaultAction: function(){
             this.showMain();
+            this.menuView.setActive(null);
+            this.setActionContent(null);
         },
 
-		    showMain: function(){
-            this.menuView.render();
-			      this.contactListView.render();
-			      this.importView.close();
-        },
+        addContactAction: function() {
+            this.showMain();
+            this.menuView.setActive('new');
 
-        showMe: function() {
-            this.importView.close();
-            this.contactView = new ContactView({
-                //contact: 
+            this.contactForm = new ContactFormView({
+                collection: this.contactCollection,
+                model: new ContactModel()
             });
+
+            this.contactForm.render();
+            this.setActionContent(this.contactForm.$el);
         },
-		    
-        showImport: function(){
+
+        showContactAction: function(id) {
+				    
+        },
+
+        editContactAction: function(id) {
+            this.showMain();
+            this.menuView.setActive(null);
+
+            this.contactForm = new ContactFormView({
+                collection: this.contactCollection,
+                model: this.contactCollection.get(id)
+            });
+
+            this.contactForm.render();
+            this.setActionContent(this.contactForm.$el);
+        },
+
+        importContactAction: function(){
             this.showMain();
             this.menuView.setActive('import');
+
+			      this.importView = new ContactImportView({
+                collection: this.contactCollection
+            });
+
 			      this.importView.render();
+            this.setActionContent(this.importView.$el);
 		    },
+
+        /**
+         * HELPERS
+         **/
+
+		    showMain: function() {
+            // only render menu and list once.
+            if(! this.menuView.rendered) {
+                this.menuView.render();
+                $(document.body).append(this.menuView.$el);
+            }
+            if(! this.contactListView.rendered) {
+			          this.contactListView.render();
+            }
+        },
+
+		    setActionContent: function(content) {
+            if(content) {
+                $('#contacts').removeClass('full');
+                $('#action-content').html(content);
+            } else {
+                $('#action-content').html('');
+                $('#contacts').addClass('full');
+            }
+        }
 		    
     });
     var initialize = function(){
