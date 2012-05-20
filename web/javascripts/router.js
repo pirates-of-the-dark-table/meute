@@ -47,7 +47,7 @@ define([
             this.menuView = new MenuView({
                 collection: [
                     { label: "New", key: 'new', route: 'contact/add' },
-                    { label: "Import", key: 'contact/import' }
+                    { label: "Import", key: 'import', route: 'contact/import' }
                 ]
             });
 
