@@ -1,0 +1,20 @@
+/* -*- mode:css -*- */
+
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    overflow-x: hidden;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+@import "header";
+@import "contact_list";
+@import "contact";

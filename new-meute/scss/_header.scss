@@ -1,0 +1,31 @@
+/* -*- mode:css -*- */
+
+#content-header {
+    background: #222;
+    background-image: -moz-linear-gradient(top, #444, #222);
+    background-image: -webkit-linear-gradient(top, #444, #222);
+    background-image: linear-gradient(top, #444, #222);
+    border-bottom: solid 1px #333;
+    box-shadow: 0px 3px 5px #222;
+    color: #ddd;
+    font-size: 1.4em;
+    line-height: 50px;
+    padding-left: 20px;
+    padding-top: 5px;
+    position: relative;
+    z-index: 40;
+}
+
+#content-header #remotestorage-connect {
+    position: absolute;
+    top: 8px;
+}
+
+#info {
+    color: #ffc;
+    font-size: 0.7em;
+    font-weight: bold;
+    left: 30%;
+    position: absolute;
+    top: 15px;
+}

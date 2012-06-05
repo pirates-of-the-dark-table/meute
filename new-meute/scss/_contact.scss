@@ -1,0 +1,59 @@
+/* -*- mode:css -*- */
+
+#contact {
+    background: white;
+    left: 30%;
+    padding-left: 20px;
+    padding-top: 20px;
+    position: absolute;
+    top: 55px;
+    width: 70%;
+
+    .picture {
+        background: white;
+        border: solid 1px #333;
+        float: left;
+        padding: 5px;
+        
+    }
+
+    .basic {
+        margin-left: 150px;
+
+        .fn {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .org {
+            font-style: italic;
+        }
+
+        .org * {
+            display: inline;
+        }
+
+    }
+
+    .contact-information {
+        margin-top: 30px;
+        margin-left: 150px;
+    }
+
+    .contact-information header  {
+        font-weight: bold;
+    }
+
+    .email .type {
+        color: #999;
+        display: inline-block;
+        font-size: 0.7em;
+        text-transform: uppercase;
+        width: 80px;
+    }
+
+    .email .value {
+        display: inline;
+    }
+
+}

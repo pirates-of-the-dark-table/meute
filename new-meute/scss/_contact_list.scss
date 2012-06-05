@@ -1,0 +1,81 @@
+/* -*- mode:css -*- */
+
+#contact-list {
+    background: #ddd;
+    box-shadow: 6px 0px 4px -4px black;
+    color: #777;
+    margin-top: -10px;
+    min-height: 404px;
+    padding-top: 20px;
+    position: relative;
+    width: 30%;
+    z-index: 30;
+
+    header {
+        margin-bottom: 10px;
+        text-align: center;
+
+        .search {
+
+            input[type="text"] {
+                background-image: url(../img/search-icon.png);
+                background-repeat: no-repeat;
+                background-position: 8px 8px;
+                border: solid 1px black;
+                border-radius: 10px;
+                font-size: 1.1em;
+                line-height: 22px;
+                outline: none;
+                padding: 5px 10px 5px 30px;
+                width: 60%;
+            }
+
+            input[type="submit"] {
+                display: none;
+            }
+        }
+
+    }
+
+    .row {
+        border-top: solid 1px white;
+        border-bottom: solid 1px #999;
+        line-height: 45px;
+        padding: 5px 0 5px 20px;
+
+        &:first-child {
+            border-top: none;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &.active {
+            font-weight: bold;
+        }
+
+        .icon {
+            background: white;
+            border: solid 1px #333;
+            float: left;
+            height: 32px;
+            margin-right: 8px;
+            padding: 3px;
+            vertical-align: middle;
+            width: 32px;
+        }
+
+        a {
+            clear: none;
+            display: block;
+        }
+
+        a:hover, &.active a {
+            color: #333;
+        }
+
+    }
+
+}
+

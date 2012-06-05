@@ -1,0 +1,1 @@
+../../../vcardjs/dist/latest.js

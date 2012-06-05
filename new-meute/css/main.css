@@ -1,0 +1,130 @@
+/* -*- mode:css -*- */
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  overflow-x: hidden; }
+
+* {
+  margin: 0;
+  padding: 0; }
+
+a {
+  color: inherit;
+  text-decoration: none; }
+
+/* -*- mode:css -*- */
+#content-header {
+  background: #222;
+  background-image: -moz-linear-gradient(top, #444444, #222222);
+  background-image: -webkit-linear-gradient(top, #444444, #222222);
+  background-image: linear-gradient(top, #444444, #222222);
+  border-bottom: solid 1px #333;
+  box-shadow: 0px 3px 5px #222;
+  color: #ddd;
+  font-size: 1.4em;
+  line-height: 50px;
+  padding-left: 20px;
+  padding-top: 5px;
+  position: relative;
+  z-index: 40; }
+
+#content-header #remotestorage-connect {
+  position: absolute;
+  top: 8px; }
+
+#info {
+  color: #ffc;
+  font-size: 0.7em;
+  font-weight: bold;
+  left: 30%;
+  position: absolute;
+  top: 15px; }
+
+/* -*- mode:css -*- */
+#contact-list {
+  background: #ddd;
+  box-shadow: 6px 0px 4px -4px black;
+  color: #777;
+  margin-top: -10px;
+  min-height: 404px;
+  padding-top: 20px;
+  position: relative;
+  width: 30%;
+  z-index: 30; }
+  #contact-list header {
+    margin-bottom: 10px;
+    text-align: center; }
+    #contact-list header .search input[type="text"] {
+      background-image: url(../img/search-icon.png);
+      background-repeat: no-repeat;
+      background-position: 8px 8px;
+      border: solid 1px black;
+      border-radius: 10px;
+      font-size: 1.1em;
+      line-height: 22px;
+      outline: none;
+      padding: 5px 10px 5px 30px;
+      width: 60%; }
+    #contact-list header .search input[type="submit"] {
+      display: none; }
+  #contact-list .row {
+    border-top: solid 1px white;
+    border-bottom: solid 1px #999;
+    line-height: 45px;
+    padding: 5px 0 5px 20px; }
+    #contact-list .row:first-child {
+      border-top: none; }
+    #contact-list .row:last-child {
+      border-bottom: none; }
+    #contact-list .row.active {
+      font-weight: bold; }
+    #contact-list .row .icon {
+      background: white;
+      border: solid 1px #333;
+      float: left;
+      height: 32px;
+      margin-right: 8px;
+      padding: 3px;
+      vertical-align: middle;
+      width: 32px; }
+    #contact-list .row a {
+      clear: none;
+      display: block; }
+    #contact-list .row a:hover, #contact-list .row.active a {
+      color: #333; }
+
+/* -*- mode:css -*- */
+#contact {
+  background: white;
+  left: 30%;
+  padding-left: 20px;
+  padding-top: 20px;
+  position: absolute;
+  top: 55px;
+  width: 70%; }
+  #contact .picture {
+    background: white;
+    border: solid 1px #333;
+    float: left;
+    padding: 5px; }
+  #contact .basic {
+    margin-left: 150px; }
+    #contact .basic .fn {
+      font-size: 1.2em;
+      font-weight: bold; }
+    #contact .basic .org {
+      font-style: italic; }
+    #contact .basic .org * {
+      display: inline; }
+  #contact .contact-information {
+    margin-top: 30px;
+    margin-left: 150px; }
+  #contact .contact-information header {
+    font-weight: bold; }
+  #contact .email .type {
+    color: #999;
+    display: inline-block;
+    font-size: 0.7em;
+    text-transform: uppercase;
+    width: 80px; }
+  #contact .email .value {
+    display: inline; }
