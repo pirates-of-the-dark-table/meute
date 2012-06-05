@@ -14,19 +14,24 @@ define([
         template: _.template(template),
 		    
 		    initialize: function(){
-			      this.collection.on("add", function(model) {
-				        this.addOne(model);
-			      }, this);
-
-            this.collection.on("remove", function(model) {
-                this.removeOne(model);
-            }, this)
+          this.collection.on("add", function(model) {
+            this.addOne(model);
+            this.toggleEmpty(true);
+          }, this);
+          this.collection.on("remove", function(model) {
+            this.removeOne(model);
+            this.toggleEmpty();
+          }, this);
 		    },
         
 	      render: function(){
             this.$el.html(this.template(/*this.model.toJSON()*/));
+
+            this.emptyListEl = this.$('#contact-list-empty');
+            this.toggleEmpty();
+
             this.collection.each(function (model) {
-                this.addOne(model);
+              this.addOne(model);
             }, this);
         },
 
@@ -36,7 +41,15 @@ define([
 
         addOne: function(model){
             var listItemView = new ListItemView({model: model});
-            this.$('#contact-list').append(listItemView.render().el);
+            this.$('#contact-list ul').append(listItemView.render().el);
+        },
+
+        toggleEmpty: function(notEmpty) {
+          if (notEmpty || this.collection.length) {
+            this.emptyListEl.hide();
+          } else {
+            this.emptyListEl.show();
+          }
         }
     });
     
