@@ -1,9 +1,11 @@
 
 define([
-    'helpers'
-], function(helpers) {
+    'underscore', 'helpers', 'base_view'
+], function(_, helpers, baseView) {
 
-    return {
+    return _.extend({}, baseView, {
+
+        state: 'show',
 
         setup: function(options) {
             this.div = options.div;
@@ -19,15 +21,36 @@ define([
             }
 
             this.contact = contact;
+            if(! this.contact.validate()) {
+                this.state = 'edit';
+            }
             this.render();
         },
 
         render: function() {
             this.div.innerHTML = '';
 
-            this.renderPicture();
-            this.renderBasic();
-            this.renderContactInformation();
+            switch(this.state) {
+            case 'show':
+                this.renderPicture();
+                this.renderBasic();
+                this.renderContactInformation();
+                break;
+            case 'edit':
+                this.renderForm();
+                break;
+            }
+
+        },
+
+        renderForm: function() {
+            var form = document.createElement('form');
+            
+            form.appendChild(
+                helpers.input(this.contact, 'fn', "Full Name")
+            );
+
+            this.div.appendChild(form);
         },
 
         renderPicture: function() {
@@ -93,6 +116,6 @@ define([
             this.div.appendChild(helpers.div('contact-information', parts));
         },
 
-    };
+    });
 
 });

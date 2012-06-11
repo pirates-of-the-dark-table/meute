@@ -1,16 +1,32 @@
 
 define([
     'underscore', 'helpers', 'contact_list',
-    'contact_list_view', 'contact_details_view'
-], function(_, helpers, ContactList, contactListView, contactDetailsView) {
+    'contact_list_view', 'contact_details_view',
+    'navigation_view'
+], function(_, helpers, ContactList, contactListView,
+            contactDetailsView, navigationView) {
     
     return {
+
+        ready: false,
 
         initialize: function() {
 
             this.setupLayout();
 
             this.contactList = new ContactList();
+
+            this.infoDiv = document.getElementById('info');
+
+            var _this = this;
+
+            navigationView.setup({
+                div: document.getElementById('navigation')
+            });
+
+            this.setupSyncer();
+
+            this.setupDragDrop();
 
             contactListView.setup({
                 list: this.contactList,
@@ -21,13 +37,9 @@ define([
                 div: document.getElementById('contact')
             });
 
-            this.infoDiv = document.getElementById('info');
+            this.ready = true;
 
-            this.setupSyncer();
-
-            helpers.addEvent(window, 'popstate', this.loadState, this);
-
-            this.setupDragDrop();
+            this.loadState();
 
         },
 
@@ -44,10 +56,20 @@ define([
         },
 
         loadState: function(event) {
-            var params = helpers.parseParams(document.location.search);
-            if(params.id) {
-                this.loadContact(params.id);
+            if(! this.ready) {
+                console.log('not ready yet');
+                return;
             }
+            console.log("EVENT", event);
+            var params = helpers.parseParams(document.location.search);
+
+            console.log("loadState", params);
+
+            if(! params.action) {
+                params.action = 'list';
+            }
+
+            this.actions[params.action].apply(this);
         },
 
         setupLayout: function() {
@@ -93,6 +115,30 @@ define([
                 this.displayInfo();
                 this.contactList.addVCards(event.dataTransfer.files);
             }, this);
+        },
+
+        actions: {
+
+            list: function() {
+                contactDetailsView.hide();
+                contactListView.show();
+                navigationView.setActive('list');
+            },
+
+            show: function() {
+                contactListView.hide();
+                contactDetailsView.show();
+                this.loadContact(params.id);
+            },
+
+            me: function() {
+                contactListView.hide();
+                contactDetailsView.connect(this.contactList.get('me'));
+                contactDetailsView.show();
+                navigationView.setActive('me');
+            }
+
+
         }
 
     };

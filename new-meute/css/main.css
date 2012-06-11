@@ -21,9 +21,8 @@ a {
   box-shadow: 0px 3px 5px #222;
   color: #ddd;
   font-size: 1.4em;
+  height: 50px;
   line-height: 50px;
-  padding-left: 20px;
-  padding-top: 5px;
   position: relative;
   z-index: 40; }
 
@@ -38,6 +37,28 @@ a {
   left: 30%;
   position: absolute;
   top: 15px; }
+
+#content-header nav button {
+  background: inherit;
+  border-color: #ddd;
+  border-style: none solid;
+  border-width: 1px;
+  color: #ddd;
+  display: block;
+  font-size: 0.8em;
+  float: left;
+  line-height: 50px;
+  margin: 0;
+  padding: 0 30px; }
+  #content-header nav button:first-child {
+    border-left: none; }
+  #content-header nav button:last-child {
+    border-right: none; }
+  #content-header nav button:hover, #content-header nav button.active {
+    border-color: white;
+    color: white; }
+  #content-header nav button.active {
+    font-weight: bold; }
 
 /* -*- mode:css -*- */
 #contact-list {

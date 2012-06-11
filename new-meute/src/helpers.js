@@ -14,6 +14,11 @@ define(['underscore'], function(_) {
             }
         },
 
+        setParams: function(params) {
+            history.pushState({}, null, this.generateParams(params));
+            Meute.loadState();
+        },
+
         classNames: function(elem) {
             return elem.getAttribute('class').split(/\s+/);
         },
@@ -30,6 +35,13 @@ define(['underscore'], function(_) {
             elem.setAttribute('class', classNames.join(' '));
         },
 
+        generateParams: function(params) {
+            return _.inject(params, function(output, value, key) {
+                var sep = output.length == 0 ? '?' : '&';
+                return output + sep + key + '=' + value;
+            }, '');
+        },
+
         parseParams: function(queryString) {
             return _.inject(queryString.split(/[\?&]/), function(params, part) {
                 var md = part.split('=');
@@ -38,6 +50,14 @@ define(['underscore'], function(_) {
                 }
                 return params;
             }, {});
+        },
+
+        showElement: function(element) {
+            element.style.display = 'block';
+        },
+
+        hideElement: function(element) {
+            element.style.display = 'none';
         },
 
         div: function(className, content) {
@@ -56,6 +76,19 @@ define(['underscore'], function(_) {
                 div.appendChild(part);
             });
             return div;
+        },
+
+        input: function(object, name, labelText, type) {
+            var label = document.createElement('label');
+            var input = document.createElement('input');
+            var id = 'form-input-' + name;
+            input.setAttribute('type', type || 'text');
+            input.setAttribute('name', name);
+            input.setAttribute('id', id);
+            input.setAttribute('value', object[name] || '');
+            label.innerText = labelText;
+            label.setAttribute('for', id);
+            return this.div('input', [label, input]);
         }
     };
 

@@ -10,9 +10,13 @@ require.config({
 });
 
 require([
-    'meute'
-], function(Meute) {
+    'meute', 'helpers'
+], function(Meute, helpers) {
 
-    Meute.initialize();
-    window.Meute = Meute;
+    helpers.addEvent(window, 'popstate', Meute.loadState, Meute);
+
+    helpers.addEvent(window, 'load', function() {
+        Meute.initialize();
+        window.Meute = Meute;
+    });
 });

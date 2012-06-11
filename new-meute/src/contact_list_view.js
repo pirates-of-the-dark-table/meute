@@ -1,9 +1,9 @@
 
 define([
-    'helpers'
-], function(helpers) {
+    'underscore', 'helpers', 'base_view'
+], function(_, helpers, baseView) {
 
-    return {
+    return _.extend({}, baseView, {
 
         setup: function(options) {
             this.div = options.div;
@@ -15,7 +15,10 @@ define([
                 if(event.target.tagName == 'A') {
                     var contactId = event.target.getAttribute('data-contact-id');
                     if(contactId) {
-                        history.pushState({}, null, "?id=" + contactId);
+                        helpers.setParams({
+                            action: 'show',
+                            id: contactId
+                        });
                     }
                 }
             }, this);
@@ -76,6 +79,6 @@ define([
             }, this);
         }
 
-    };
+    });
 
 });
