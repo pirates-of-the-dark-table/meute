@@ -39,6 +39,20 @@ define([
         this.items = [];
     }
 
+    function instanceMethods(contactList) {
+        return {
+            
+            save: function() {
+                return contactList.save(this);
+            },
+
+            setAttributes: function() {
+                console.log('set attributes', arguments);
+            }
+
+        };
+    }
+
     ContactList.prototype = {
 
         add: function(item) {
@@ -51,18 +65,20 @@ define([
         },
 
         _wrap: function(attributes) {
-            if(attributes instanceof VCard) {
-                return attributes;
-            } else {
-                return new VCard(attributes);
-            }
+            return _.extend(
+                {},
+                (attributes instanceof VCard) ?
+                    attributes :
+                    new VCard(attributes),
+                instanceMethods(this)
+            );
         },
 
-	build: function() {
-	    return new VCard();
-	},
+	      build: function() {
+            return this._wrap(new VCard());
+	      },
 
-        create: function(attributes) {
+        save: function(attributes) {
             var item = this._wrap(attributes);
             if(item.validate()) {
                 syncer.setItem('contacts', item.uid, item.toJCard());
@@ -70,6 +86,7 @@ define([
             } else {
                 console.error("Item has errors:", item.errors);
             }
+            return item;
         },
 
         addVCards: function(fileList) {

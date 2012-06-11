@@ -1,12 +1,18 @@
 define(['underscore'], function(_) {
 
     return {
+        // bind event handler for given type to given element.
+        // Example:
+        //   helpers.addEvent(window, 'load', function(event) {
+        //     // window.onload was fired!
+        //   });
+        // 'handler' will be bound to given 'context'.
         addEvent: function(elem, type, handler, context) {
-	    var wrappedHandler = function(event) {
-		event = event || window.event;
-		handler.apply(this, [event]);
-		return !event.cancelBubble;
-	    }
+	          var wrappedHandler = function(event) {
+		            event = event || window.event;
+		            handler.apply(this, [event]);
+		            return !event.cancelBubble;
+	          }
             var boundHandler = context ? _.bind(wrappedHandler, context) : wrappedHandler;
             if(elem == null || elem == undefined) {
                 return;
@@ -19,16 +25,26 @@ define(['underscore'], function(_) {
             }
         },
 
-	stopEvent: function(event) {
-	    if(event.stopPropagation) {
-		event.stopPropagation();
-	    } else {
-		event.cancelBubble = true;
-	    }
-	    if(event.preventDefault) {
-		event.preventDefault();
-	    }
-	},
+        // stop event from propagating and prevent default.
+	      stopEvent: function(event) {
+	          if(event.stopPropagation) {
+		            event.stopPropagation();
+	          } else {
+		            event.cancelBubble = true;
+	          }
+	          if(event.preventDefault) {
+		            event.preventDefault();
+	          }
+	      },
+
+        // combination of addEvent / stopEvent
+        catchEvent: function(elem, type, handler, context) {
+            var boundHandler = context ? _.bind(handler, context) : handler;
+            this.addEvent(elem, type, function(event) {
+                this.stopEvent(event);
+                boundHandler(event);
+            }, this);
+        },
 
         setParams: function(params) {
             history.pushState({}, null, this.generateParams(params));
@@ -89,6 +105,7 @@ define(['underscore'], function(_) {
                 if(typeof(part) == 'string') {
                     part = document.createTextNode(part);
                 }
+                console.log('will append part', part, 'to', div);
                 div.appendChild(part);
             });
             return div;
@@ -97,51 +114,50 @@ define(['underscore'], function(_) {
         input: function(object, name, labelText, type, selectOptions) {
             var label = '';
             var id = 'form-input-' + name;
-	    var input;
+	          var input;
 
-	    if(labelText) {
-		label = document.createElement('label');
-		label.innerHTML = labelText;
-		label.setAttribute('for', id);
-	    }
+	          if(labelText) {
+		            label = document.createElement('label');
+		            label.innerHTML = labelText;
+		            label.setAttribute('for', id);
+	          }
 
-	    if(type == 'select') {
-		input = document.createElement('select');
-		_.each(selectOptions, function(label, value) {
-		    var option = document.createElement('option');
-		    option.setAttribute('value', value);
-		    option.innerHTML = label;
-		    if(object[name] == value) {
-			option.setAttribute('selected', 'selected');
-		    }
-		    input.appendChild(option);
-		});
-	    } else {
-		input = document.createElement('input');
-		input.setAttribute('type', type || 'text');
-		input.setAttribute('value', object[name] || '');
-	    }
-	    input.setAttribute('id', id);
-	    input.setAttribute('name', name);
+	          if(type == 'select') {
+		            input = document.createElement('select');
+		            _.each(selectOptions, function(label, value) {
+		                var option = document.createElement('option');
+		                option.setAttribute('value', value);
+		                option.innerHTML = label;
+		                if(object[name] == value) {
+			                  option.setAttribute('selected', 'selected');
+		                }
+		                input.appendChild(option);
+		            });
+	          } else {
+		            input = document.createElement('input');
+		            input.setAttribute('type', type || 'text');
+		            input.setAttribute('value', object[name] || '');
+	          }
+	          input.setAttribute('id', id);
+	          input.setAttribute('name', name);
             return this.div('input', [label, input]);
         },
 
-	button: function(label, handler, context, type) {
-	    var input = document.createElement('input');
-	    input.setAttribute('type', type || 'button');
-	    input.setAttribute('value', label);
-	    if(handler) {
-		this.addEvent(input, 'click', function(event) {
-		    this.stopEvent(event);
-		    handler.apply(context || this, [event]);
-		}, this);
-	    }
-	    return input;
-	},
+	      button: function(label, handler, context, type) {
+	          var input = document.createElement('input');
+	          input.setAttribute('type', type || 'button');
+	          input.setAttribute('value', label);
+	          if(handler) {
+		            this.catchEvent(input, 'click', function(event) {
+		                handler.apply(context || this, [event]);
+		            }, this);
+	          }
+	          return input;
+	      },
 
-	submit: function(label) {
-	    return this.button(label, null, null, 'submit');
-	}
+	      submit: function(label) {
+	          return this.button(label, null, null, 'submit');
+	      }
     };
 
 });

@@ -69,12 +69,12 @@ define([
                 params.action = 'list';
             }
 
-	    var actionHandler = this.actions[params.action];
-	    if(! actionHandler) {
-		console.error("Unknown action: ", params.action);
-	    } else {
-		actionHandler.apply(this);
-	    }
+	          var actionHandler = this.actions[params.action];
+	          if(! actionHandler) {
+		            console.error("Unknown action: ", params.action);
+	          } else {
+		            actionHandler.apply(this);
+	          }
         },
 
         setupLayout: function() {
@@ -123,33 +123,28 @@ define([
 
         actions: {
 
-            list: function() {
-                contactDetailsView.hide();
-                contactListView.show();
-                navigationView.setActive('list');
-            },
-
             show: function() {
-                contactListView.hide();
                 contactDetailsView.show();
                 this.loadContact(params.id);
             },
 
             me: function() {
-                contactListView.hide();
-		contactDetailsView.setTitle('Me');
+		            contactDetailsView.setTitle('Me');
                 contactDetailsView.connect(this.contactList.get('me'));
                 contactDetailsView.show();
                 navigationView.setActive('me');
             },
 
-	    new: function() {
-		contactListView.hide();
-		contactDetailsView.setTitle('New Contact');
-		contactDetailsView.connect(this.contactList.build());
-		contactDetailsView.show();
-		navigationView.setActive('new');
-	    }
+            list: function() {
+                contactDetailsView.hide();
+            },
+
+	          new: function() {
+		            contactDetailsView.setTitle('New Contact');
+		            contactDetailsView.connect(this.contactList.build());
+		            contactDetailsView.show();
+		            navigationView.setActive('new');
+	          }
 
         }
 

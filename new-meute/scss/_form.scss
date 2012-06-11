@@ -3,67 +3,90 @@
 form {
 
     .buttons {
-	margin-bottom: 20px;
+	      margin-bottom: 20px;
 
-	input[type="submit"], input[type="button"] {
-	    border: solid 1px #ccc;
-	    height: 30px;
-	    padding: 0 5px;
+	      input[type="submit"], input[type="button"] {
+            background-image: -webkit-linear-gradient(#ddd, #ccc);
+	          border: solid 1px #aaa;
+	          height: 30px;
+	          padding: 0 15px;
 
-	    &:first-child {
-		border-radius: 5px 0 0 5px;
-	    }
+            &[type="submit"] {
+                font-weight: bold;
+            }
 
-	    &:last-child {
-		border-radius: 0 5px 5px 0;
-	    }
-	}
+            &:hover {
+                background-image: -webkit-linear-gradient(#eee, #ddd);
+            }
+
+            &:active {
+                background-image: -webkit-linear-gradient(#ccc, #ddd);
+            }
+
+	          &:first-child {
+		            border-radius: 5px 0 0 5px;
+	          }
+
+	          &:last-child {
+		            border-radius: 0 5px 5px 0;
+	          }
+	      }
     }
 
     .input {
-	max-width: 350px;
-	padding: 5px;
+	      max-width: 350px;
+	      padding: 5px;
 
-	label {
-	    color: #333;
-	    display: block;
-	    font-size: 12px;
-	    font-style: italic;
-	}
+        .errors {
+            color: red;
+            font-size: 10px;
+            position: absolute;
+        }
 
-	input {
-	    border: solid 1px #333;
-	    width: 198px;
-	}
+	      label {
+	          color: #333;
+	          display: block;
+	          font-size: 12px;
+	          font-style: italic;
+	      }
 
-	&.short input {
-	    width: 98px;
-	}
+	      input {
+	          border: solid 1px #333;
+	          width: 198px;
 
-	&.typed {
-	    clear: left;
+            &.has-error {
+                border-color: red;
+            }
+	      }
 
-	    .input {
-		float: left;
-		padding: 0;
-	    }
+	      &.short input {
+	          width: 98px;
+	      }
 
-	    a {
-		display: block;
-		float: left;
-		line-height: 15px;
-		padding: 3px;
-	    }
+	      &.typed {
+	          clear: left;
 
-	    a.add {
-		display: none;
-	    }
+	          .input {
+		            float: left;
+		            padding: 0;
+	          }
 
-	    &:last-child {
-		a.add {
-		    display: block;
-		}
-	    }
-	}
+	          a {
+		            display: block;
+		            float: left;
+		            line-height: 15px;
+		            padding: 3px;
+	          }
+
+	          a.add {
+		            display: none;
+	          }
+
+	          &:last-child {
+		            a.add {
+		                display: block;
+		            }
+	          }
+	      }
     }
 }

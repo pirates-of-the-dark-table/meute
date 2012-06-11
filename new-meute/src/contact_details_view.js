@@ -9,8 +9,8 @@ define([
 
         setup: function(options) {
             this.div = options.div;
-	    this.titleDiv = document.createElement('div');
-	    helpers.addClass(this.titleDiv, 'title');
+	          this.titleDiv = document.createElement('div');
+	          helpers.addClass(this.titleDiv, 'title');
         },
 
         disconnect: function() {
@@ -23,26 +23,26 @@ define([
             }
 
             this.contact = contact;
-	    console.log(this.contact);
+	          console.log(this.contact);
             if(! this.contact.validate()) {
                 this.state = 'edit';
             }
             this.render();
         },
 
-	setTitle: function(title) {
-	    this.titleDiv.innerHTML = title;
-	},
+	      setTitle: function(title) {
+	          this.titleDiv.innerHTML = title;
+	      },
 
-	setState: function(state) {
-	    this.state = state;
-	    this.render();
-	},
+	      setState: function(state) {
+	          this.state = state;
+	          this.render();
+	      },
 
         render: function() {
             this.div.innerHTML = '';
 
-	    this.div.appendChild(this.titleDiv);
+	          this.div.appendChild(this.titleDiv);
 
             switch(this.state) {
             case 'show':
@@ -58,7 +58,7 @@ define([
         },
 
         renderForm: function() {
-	    contactFormView.render(this);
+	          contactFormView.render(this);
         },
 
         updateValue: function(event) {

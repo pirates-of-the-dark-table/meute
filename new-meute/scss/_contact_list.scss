@@ -37,6 +37,17 @@
 
     }
 
+    .placeholder {
+        font-style: italic;
+        padding: 10px;
+        text-align: center;
+
+        a {
+            color: #333;
+            text-decoration: underline;
+        }
+    }
+
     .row {
         border-top: solid 1px white;
         border-bottom: solid 1px #999;

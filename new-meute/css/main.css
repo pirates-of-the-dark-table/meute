@@ -87,6 +87,13 @@ a {
       width: 60%; }
     #contact-list header .search input[type="submit"] {
       display: none; }
+  #contact-list .placeholder {
+    font-style: italic;
+    padding: 10px;
+    text-align: center; }
+    #contact-list .placeholder a {
+      color: #333;
+      text-decoration: underline; }
   #contact-list .row {
     border-top: solid 1px white;
     border-bottom: solid 1px #999;
@@ -116,6 +123,7 @@ a {
 /* -*- mode:css -*- */
 #contact {
   background: white;
+  left: 30%;
   padding-left: 20px;
   padding-top: 20px;
   position: absolute;
@@ -156,9 +164,16 @@ a {
 form .buttons {
   margin-bottom: 20px; }
   form .buttons input[type="submit"], form .buttons input[type="button"] {
-    border: solid 1px #ccc;
+    background-image: -webkit-linear-gradient(#dddddd, #cccccc);
+    border: solid 1px #aaa;
     height: 30px;
-    padding: 0 5px; }
+    padding: 0 15px; }
+    form .buttons input[type="submit"][type="submit"], form .buttons input[type="button"][type="submit"] {
+      font-weight: bold; }
+    form .buttons input[type="submit"]:hover, form .buttons input[type="button"]:hover {
+      background-image: -webkit-linear-gradient(#eeeeee, #dddddd); }
+    form .buttons input[type="submit"]:active, form .buttons input[type="button"]:active {
+      background-image: -webkit-linear-gradient(#cccccc, #dddddd); }
     form .buttons input[type="submit"]:first-child, form .buttons input[type="button"]:first-child {
       border-radius: 5px 0 0 5px; }
     form .buttons input[type="submit"]:last-child, form .buttons input[type="button"]:last-child {
@@ -166,6 +181,10 @@ form .buttons {
 form .input {
   max-width: 350px;
   padding: 5px; }
+  form .input .errors {
+    color: red;
+    font-size: 10px;
+    position: absolute; }
   form .input label {
     color: #333;
     display: block;
@@ -174,6 +193,8 @@ form .input {
   form .input input {
     border: solid 1px #333;
     width: 198px; }
+    form .input input.has-error {
+      border-color: red; }
   form .input.short input {
     width: 98px; }
   form .input.typed {

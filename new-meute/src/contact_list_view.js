@@ -5,12 +5,16 @@ define([
 
     return _.extend({}, baseView, {
 
+        placeholderVisible: true,
+
         setup: function(options) {
-	    console.log('setup contactListView', options);
+	          console.log('setup contactListView', options);
             this.div = options.div;
             if(options.list) {
                 this.connect(options.list);
             }
+
+            this.place
 
             helpers.addEvent(this.div, 'click', function(event) {
                 if(event.target.tagName == 'A') {
@@ -52,6 +56,10 @@ define([
         },
 
         renderItem: function(item) {
+            if(this.placeholderVisible) {
+                this.placeholder.style.display = 'none';
+                this.placeholderVisible = false;
+            }
             var row = document.createElement('div');
             row.setAttribute('class', 'row');
             var img = document.createElement('img');
