@@ -51,6 +51,16 @@ define([
             );
 
             this.div.appendChild(form);
+
+            helpers.addEvent(form, 'change', this.updateValue, this);
+        },
+
+        updateValue: function(event) {
+            // FIXME: broken!
+            var key = event.target.getAttribute('name');
+            var value = event.target.getAttribute('value');
+            console.log('set', key, value, event);
+            this.contact.addAttribute(key, value);
         },
 
         renderPicture: function() {
