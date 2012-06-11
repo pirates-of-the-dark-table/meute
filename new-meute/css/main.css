@@ -116,12 +116,14 @@ a {
 /* -*- mode:css -*- */
 #contact {
   background: white;
-  left: 30%;
   padding-left: 20px;
   padding-top: 20px;
   position: absolute;
   top: 55px;
   width: 70%; }
+  #contact .title {
+    font-size: 1.3em;
+    margin-bottom: 20px; }
   #contact .picture {
     background: white;
     border: solid 1px #333;
@@ -149,3 +151,42 @@ a {
     width: 80px; }
   #contact .email .value {
     display: inline; }
+
+/* -*- mode:css-*- */
+form .buttons {
+  margin-bottom: 20px; }
+  form .buttons input[type="submit"], form .buttons input[type="button"] {
+    border: solid 1px #ccc;
+    height: 30px;
+    padding: 0 5px; }
+    form .buttons input[type="submit"]:first-child, form .buttons input[type="button"]:first-child {
+      border-radius: 5px 0 0 5px; }
+    form .buttons input[type="submit"]:last-child, form .buttons input[type="button"]:last-child {
+      border-radius: 0 5px 5px 0; }
+form .input {
+  max-width: 350px;
+  padding: 5px; }
+  form .input label {
+    color: #333;
+    display: block;
+    font-size: 12px;
+    font-style: italic; }
+  form .input input {
+    border: solid 1px #333;
+    width: 198px; }
+  form .input.short input {
+    width: 98px; }
+  form .input.typed {
+    clear: left; }
+    form .input.typed .input {
+      float: left;
+      padding: 0; }
+    form .input.typed a {
+      display: block;
+      float: left;
+      line-height: 15px;
+      padding: 3px; }
+    form .input.typed a.add {
+      display: none; }
+    form .input.typed:last-child a.add {
+      display: block; }

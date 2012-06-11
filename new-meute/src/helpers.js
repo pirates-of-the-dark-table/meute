@@ -2,7 +2,12 @@ define(['underscore'], function(_) {
 
     return {
         addEvent: function(elem, type, handler, context) {
-            var boundHandler = context ? _.bind(handler, context) : handler;
+	    var wrappedHandler = function(event) {
+		event = event || window.event;
+		handler.apply(this, [event]);
+		return !event.cancelBubble;
+	    }
+            var boundHandler = context ? _.bind(wrappedHandler, context) : wrappedHandler;
             if(elem == null || elem == undefined) {
                 return;
             } else if(elem.addEventListener) {
@@ -14,13 +19,24 @@ define(['underscore'], function(_) {
             }
         },
 
+	stopEvent: function(event) {
+	    if(event.stopPropagation) {
+		event.stopPropagation();
+	    } else {
+		event.cancelBubble = true;
+	    }
+	    if(event.preventDefault) {
+		event.preventDefault();
+	    }
+	},
+
         setParams: function(params) {
             history.pushState({}, null, this.generateParams(params));
             Meute.loadState();
         },
 
         classNames: function(elem) {
-            return elem.getAttribute('class').split(/\s+/);
+            return (elem.getAttribute('class') || '').split(/\s+/);
         },
 
         addClass: function(elem, className) {
@@ -39,7 +55,7 @@ define(['underscore'], function(_) {
             return _.inject(params, function(output, value, key) {
                 var sep = output.length == 0 ? '?' : '&';
                 return output + sep + key + '=' + value;
-            }, '');
+            }, '') || '?';
         },
 
         parseParams: function(queryString) {
@@ -78,18 +94,55 @@ define(['underscore'], function(_) {
             return div;
         },
 
-        input: function(object, name, labelText, type) {
-            var label = document.createElement('label');
-            var input = document.createElement('input');
+        input: function(object, name, labelText, type, selectOptions) {
+            var label = '';
             var id = 'form-input-' + name;
-            input.setAttribute('type', type || 'text');
-            input.setAttribute('name', name);
-            input.setAttribute('id', id);
-            input.setAttribute('value', object[name] || '');
-            label.innerText = labelText;
-            label.setAttribute('for', id);
+	    var input;
+
+	    if(labelText) {
+		label = document.createElement('label');
+		label.innerHTML = labelText;
+		label.setAttribute('for', id);
+	    }
+
+	    if(type == 'select') {
+		input = document.createElement('select');
+		_.each(selectOptions, function(label, value) {
+		    var option = document.createElement('option');
+		    option.setAttribute('value', value);
+		    option.innerHTML = label;
+		    if(object[name] == value) {
+			option.setAttribute('selected', 'selected');
+		    }
+		    input.appendChild(option);
+		});
+	    } else {
+		input = document.createElement('input');
+		input.setAttribute('type', type || 'text');
+		input.setAttribute('value', object[name] || '');
+	    }
+	    input.setAttribute('id', id);
+	    input.setAttribute('name', name);
             return this.div('input', [label, input]);
-        }
+        },
+
+	button: function(label, handler, context, type) {
+	    var input = document.createElement('input');
+	    input.setAttribute('type', type || 'button');
+	    input.setAttribute('value', label);
+	    if(handler) {
+		this.addEvent(input, 'click', function(event) {
+		    this.stopEvent(event);
+		    handler.apply(context || this, [event]);
+		}, this);
+	    }
+	    return input;
+	},
+
+	submit: function(label) {
+	    return this.button(label, null, null, 'submit');
+	}
     };
 
 });
+

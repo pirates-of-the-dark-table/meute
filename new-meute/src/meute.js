@@ -69,7 +69,12 @@ define([
                 params.action = 'list';
             }
 
-            this.actions[params.action].apply(this);
+	    var actionHandler = this.actions[params.action];
+	    if(! actionHandler) {
+		console.error("Unknown action: ", params.action);
+	    } else {
+		actionHandler.apply(this);
+	    }
         },
 
         setupLayout: function() {
@@ -80,7 +85,6 @@ define([
         adjustLayout: function() {
             contactListView.adjustLayout();
         },
-
 
         loadContact: function(uid) {
             var item = this.contactList.get(uid);
@@ -133,11 +137,19 @@ define([
 
             me: function() {
                 contactListView.hide();
+		contactDetailsView.setTitle('Me');
                 contactDetailsView.connect(this.contactList.get('me'));
                 contactDetailsView.show();
                 navigationView.setActive('me');
-            }
+            },
 
+	    new: function() {
+		contactListView.hide();
+		contactDetailsView.setTitle('New Contact');
+		contactDetailsView.connect(this.contactList.build());
+		contactDetailsView.show();
+		navigationView.setActive('new');
+	    }
 
         }
 

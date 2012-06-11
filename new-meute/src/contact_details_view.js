@@ -1,7 +1,7 @@
 
 define([
-    'underscore', 'helpers', 'base_view'
-], function(_, helpers, baseView) {
+    'underscore', 'helpers', 'base_view', 'contact_form_view'
+], function(_, helpers, baseView, contactFormView) {
 
     return _.extend({}, baseView, {
 
@@ -9,6 +9,8 @@ define([
 
         setup: function(options) {
             this.div = options.div;
+	    this.titleDiv = document.createElement('div');
+	    helpers.addClass(this.titleDiv, 'title');
         },
 
         disconnect: function() {
@@ -21,14 +23,26 @@ define([
             }
 
             this.contact = contact;
+	    console.log(this.contact);
             if(! this.contact.validate()) {
                 this.state = 'edit';
             }
             this.render();
         },
 
+	setTitle: function(title) {
+	    this.titleDiv.innerHTML = title;
+	},
+
+	setState: function(state) {
+	    this.state = state;
+	    this.render();
+	},
+
         render: function() {
             this.div.innerHTML = '';
+
+	    this.div.appendChild(this.titleDiv);
 
             switch(this.state) {
             case 'show':
@@ -44,15 +58,7 @@ define([
         },
 
         renderForm: function() {
-            var form = document.createElement('form');
-            
-            form.appendChild(
-                helpers.input(this.contact, 'fn', "Full Name")
-            );
-
-            this.div.appendChild(form);
-
-            helpers.addEvent(form, 'change', this.updateValue, this);
+	    contactFormView.render(this);
         },
 
         updateValue: function(event) {

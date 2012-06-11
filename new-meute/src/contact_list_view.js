@@ -6,6 +6,7 @@ define([
     return _.extend({}, baseView, {
 
         setup: function(options) {
+	    console.log('setup contactListView', options);
             this.div = options.div;
             if(options.list) {
                 this.connect(options.list);

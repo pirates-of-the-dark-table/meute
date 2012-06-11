@@ -2,12 +2,17 @@
 
 #contact {
     background: white;
-    left: 30%;
+    //left: 30%;
     padding-left: 20px;
     padding-top: 20px;
     position: absolute;
     top: 55px;
     width: 70%;
+
+    .title {
+	font-size: 1.3em;
+	margin-bottom: 20px;
+    }
 
     .picture {
         background: white;

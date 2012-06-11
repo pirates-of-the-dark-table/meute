@@ -1,1 +1,1 @@
-../../../vcardjs/dist/latest.js
+/home/nil/src/vcardjs/dist/latest.js

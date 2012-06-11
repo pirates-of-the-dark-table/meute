@@ -58,6 +58,10 @@ define([
             }
         },
 
+	build: function() {
+	    return new VCard();
+	},
+
         create: function(attributes) {
             var item = this._wrap(attributes);
             if(item.validate()) {
