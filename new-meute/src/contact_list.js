@@ -39,6 +39,8 @@ define([
         this.items = [];
     }
 
+    // returns a set of instance methods for a VCard instance.
+    // these methods bind the instance to this ContactList.
     function instanceMethods(contactList) {
         return {
             
@@ -46,8 +48,10 @@ define([
                 return contactList.save(this);
             },
 
-            setAttributes: function() {
-                console.log('set attributes', arguments);
+            setAttributes: function(attributes) {
+                _.each(attributes, function(value, key) {
+                    this.setAttribute(key, value);
+                }, this);
             }
 
         };
@@ -55,16 +59,27 @@ define([
 
     ContactList.prototype = {
 
-        add: function(item) {
-            this.items.push(item);
-            this.trigger('add', [item]);
+        // add given contact to this list and trigger the 'add' event.
+        add: function(contact) {
+            this.items.push(contact);
+            this.trigger('add', [contact]);
         },
 
+        // get a VCard instance by uid from storage.
+        // if the given contact cannot be found, null is
+        // returned.
         get: function(uid) {
             return this._wrap(syncer.getItem('contacts', uid));
         },
 
+        // wrap given attributes or VCard instance, in such a way,
+        // to always return a new VCard instance, extended with
+        // instanceMethods.
+        // Return null if attributes is null in any way. 
         _wrap: function(attributes) {
+            if(! attributes) {
+                return null;
+            }
             return _.extend(
                 {},
                 (attributes instanceof VCard) ?
@@ -74,14 +89,19 @@ define([
             );
         },
 
-	      build: function() {
-            return this._wrap(new VCard());
+        // build a new VCard instance bound to this contact list.
+	      build: function(attributes) {
+            return this._wrap(new VCard(attributes));
 	      },
 
+        // persist given attributes or vcard instance.
+        // return a new item instance, possibly with
+        // information added (such as 'rev', 'uid', ...)
         save: function(attributes) {
             var item = this._wrap(attributes);
             if(item.validate()) {
                 syncer.setItem('contacts', item.uid, item.toJCard());
+                // FIXME: don't do this if we already have the item.
                 this.add(item);
             } else {
                 console.error("Item has errors:", item.errors);
@@ -89,6 +109,16 @@ define([
             return item;
         },
 
+        // remove given contact from storage and trigger 'remove' event.
+        // TODO: add undo.
+        destroy: function(contact) {
+            syncer.removeItem('contacts', contact.uid);
+            this.items = _.without(this.items, contact);
+            this.trigger('remove', [contact]);
+        },
+
+        // add VCards by parsing all files from the given FileList instance.
+        // such a list can be obtained from a drop event or file input.
         addVCards: function(fileList) {
             _.each(fileList, function(file) {
                 var reader = new FileReader();
@@ -103,28 +133,37 @@ define([
             }, this);
         },
 
-        bind: function(ref, receiver, bindings) {
+        // bind given receiver to this contact list, by setting
+        // a set of event handlers.
+        // the given ref can be used to overwrite or remove this
+        // binding (unbind).
+        // handlers is a map { name : function }, e.g.:
+        //   { add: function() { console.log('added'); } }
+        bind: function(ref, receiver, handlers) {
             this._bindings[ref] = {
-                receiver: receiver, bindings: bindings
+                receiver: receiver, handlers: handlers
             };
 
-            if(bindings.add) { // call 'add' for all current items
+            if(handlers.add) {
+                // call 'add' for all current items,
+                // in case the receiver is bound late.
                 _.each(this.items, function(item) {
-                    bindings.add.apply(receiver, [item])
+                    handlers.add.apply(receiver, [item])
                 });
             }
         },
 
+        // remove binding with the given ref.
         unbind: function(ref) {
             delete this._bindings[ref];
         },
 
+        // trigger event of given type with the given arguments.
         trigger: function(type, args) {
-            console.log('TRIGGER', type);
-            _.each(this._bindings, function(attrs) {
-                var handler = attrs.bindings[type];
+            _.each(this._bindings, function(binding) {
+                var handler = binding.handlers[type];
                 if(handler) {
-                    handler.apply(attrs.receiver, args);
+                    handler.apply(binding.receiver, args);
                 }
             }, this);
         }

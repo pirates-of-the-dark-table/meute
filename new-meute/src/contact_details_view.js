@@ -5,18 +5,22 @@ define([
 
     return _.extend({}, baseView, {
 
+        // either "show" or "edit"
         state: 'show',
 
+        // bind to dom elements and setup basic view.
         setup: function(options) {
+            this.contactList = options.list;
             this.div = options.div;
 	          this.titleDiv = document.createElement('div');
 	          helpers.addClass(this.titleDiv, 'title');
         },
 
-        disconnect: function() {
-            this.contact = null;
-        },
-
+        // connect this view to the given contact.
+        // a details view can only be connected to a single contact at
+        // a time.
+        // this may jump to the "edit" state, if the given contact isn't
+        // valid (such as "new").
         connect: function(contact) {
             if(this.contact) {
                 this.disconnect();
@@ -28,6 +32,11 @@ define([
                 this.state = 'edit';
             }
             this.render();
+        },
+
+        // disconnect from contact
+        disconnect: function() {
+            this.contact = null;
         },
 
 	      setTitle: function(title) {
@@ -44,11 +53,14 @@ define([
 
 	          this.div.appendChild(this.titleDiv);
 
+            this.renderDeleteButton();
+
             switch(this.state) {
             case 'show':
                 this.renderPicture();
                 this.renderBasic();
                 this.renderContactInformation();
+                this.renderEditButton();
                 break;
             case 'edit':
                 this.renderForm();
@@ -67,6 +79,32 @@ define([
             var value = event.target.getAttribute('value');
             console.log('set', key, value, event);
             this.contact.addAttribute(key, value);
+        },
+
+        renderEditButton: function() {
+            var button = document.createElement('button');
+            helpers.addClass(button, 'edit');
+            button.innerHTML = 'Edit';
+            button.setAttribute('title', 'Edit details');
+            helpers.addEvent(button, 'click', function() {
+                this.setState('edit');
+            }, this);
+            this.div.appendChild(button);
+        },
+
+        renderDeleteButton: function() {
+            var button = document.createElement('button');
+            helpers.addClass(button, 'delete');
+            button.innerHTML = "Delete";
+						button.setAttribute('title', "Delete this contact.");
+            helpers.addEvent(button, 'click', this.deleteContact, this);
+            this.div.appendChild(button);
+        },
+
+        deleteContact: function() {
+            this.contactList.destroy(this.contact);
+            this.disconnect(this.contact);
+            this.div.innerHTML = '';
         },
 
         renderPicture: function() {

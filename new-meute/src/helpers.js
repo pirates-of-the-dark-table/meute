@@ -105,16 +105,19 @@ define(['underscore'], function(_) {
                 if(typeof(part) == 'string') {
                     part = document.createTextNode(part);
                 }
-                console.log('will append part', part, 'to', div);
+                //console.log('will append part', part, 'to', div);
                 div.appendChild(part);
             });
             return div;
         },
 
-        input: function(object, name, labelText, type, selectOptions) {
+        input: function(object, name, labelText, type, selectOptions, val) {
             var label = '';
             var id = 'form-input-' + name;
 	          var input;
+            if(! val) {
+                val = object[name] || '';
+            }
 
 	          if(labelText) {
 		            label = document.createElement('label');
@@ -128,7 +131,7 @@ define(['underscore'], function(_) {
 		                var option = document.createElement('option');
 		                option.setAttribute('value', value);
 		                option.innerHTML = label;
-		                if(object[name] == value) {
+		                if(val == value) {
 			                  option.setAttribute('selected', 'selected');
 		                }
 		                input.appendChild(option);
@@ -136,7 +139,7 @@ define(['underscore'], function(_) {
 	          } else {
 		            input = document.createElement('input');
 		            input.setAttribute('type', type || 'text');
-		            input.setAttribute('value', object[name] || '');
+		            input.setAttribute('value', val);
 	          }
 	          input.setAttribute('id', id);
 	          input.setAttribute('name', name);
@@ -157,8 +160,23 @@ define(['underscore'], function(_) {
 
 	      submit: function(label) {
 	          return this.button(label, null, null, 'submit');
-	      }
+	      },
+
+        extractFormValues: function(node, cb) {
+            if(node.tagName == 'SELECT') {
+                _.each(node.getElementsByTagName('option'), function(option) {
+                    if(option.selected) {
+                        cb(node.name, option.value);
+                    }
+                });
+            } else if(node.tagName == 'INPUT') {
+                cb(node.name, node.value);
+            } else {
+                _.each(node.childNodes, function(childNode) {
+                    this.extractFormValues(childNode, cb);
+                }, this);
+            }
+        }
     };
 
 });
-

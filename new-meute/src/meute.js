@@ -12,8 +12,6 @@ define([
 
         initialize: function() {
 
-            this.setupLayout();
-
             this.contactList = new ContactList();
 
             this.infoDiv = document.getElementById('info');
@@ -34,8 +32,11 @@ define([
             });
 
             contactDetailsView.setup({
+                list: this.contactList,
                 div: document.getElementById('contact')
             });
+
+            this.setupLayout();
 
             this.ready = true;
 
@@ -50,7 +51,9 @@ define([
                 'syncer/',
                 _.bind(function(event) {
                     console.log('syncer event', event);
-                    this.contactList.add(event.newValue);
+                    if(event.newValue) {
+                        this.contactList.add(event.newValue);
+                    }
                 }, this)
             );
         },
@@ -73,13 +76,14 @@ define([
 	          if(! actionHandler) {
 		            console.error("Unknown action: ", params.action);
 	          } else {
-		            actionHandler.apply(this);
+		            actionHandler.apply(this, [params]);
 	          }
         },
 
         setupLayout: function() {
             helpers.addEvent(window, 'resize', this.adjustLayout, this);
             helpers.addEvent(window, 'load', this.adjustLayout, this);
+            this.adjustLayout();
         },
 
         adjustLayout: function() {
@@ -89,6 +93,7 @@ define([
         loadContact: function(uid) {
             var item = this.contactList.get(uid);
             contactDetailsView.connect(item);
+            contactDetailsView.setTitle(item.fn);
             contactListView.setActive(item);
         },
 
@@ -123,14 +128,18 @@ define([
 
         actions: {
 
-            show: function() {
-                contactDetailsView.show();
+            show: function(params) {
                 this.loadContact(params.id);
+                contactDetailsView.show();
             },
 
             me: function() {
 		            contactDetailsView.setTitle('Me');
-                contactDetailsView.connect(this.contactList.get('me'));
+                contactDetailsView.connect(
+                    this.contactList.get('me') || this.contactList.build({
+                        uid: 'me'
+                    })
+                );
                 contactDetailsView.show();
                 navigationView.setActive('me');
             },

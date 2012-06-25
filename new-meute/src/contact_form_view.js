@@ -33,9 +33,10 @@ define([
             var values = {};
 
             function addValue(key, value) {
+                console.log('addValue', key, value);
                 var nestedKeyRE = /^(.+)\[(.+)\](.*)$/;
                 var md;
-                if(md = value.match(nestedKeyRE)) {
+                if(md = key.match(nestedKeyRE)) {
                     var parentKey = md[1], childKey = md[2], rest = md[3];
                     if(! values[parentKey]) {
                         values[parentKey] = {};
@@ -46,11 +47,11 @@ define([
                         return;
                     }
                     console.log('add nested value', key, '-> ', parentKey, childKey, value);
-                    if(parents[childKey]) {
-                        if(! (parents[childKey] instanceof Array)) {
-                            parents[childKey] = [parents[childKey]];
+                    if(parent[childKey]) {
+                        if(! (parent[childKey] instanceof Array)) {
+                            parent[childKey] = [parent[childKey]];
                         }
-                        parents[childKey].push(value);
+                        parent[childKey].push(value);
                     } else {
                         values[parentKey][childKey] = value;
                     }
@@ -59,19 +60,9 @@ define([
                     values[key] = value;
                 }
             }
-
             _.each(this.inputs, function(inputs, key) {
                 _.each(inputs, function(input) {
-                    if(input.tagName == 'SELECT') {
-                        _.each(input.getElementsByTagName('option'), function(option) {
-                            if(option.getAttribute('selected') == 'selected') {
-                                addValue(key, option.getAttribute('value'));
-                            }
-                        });
-                    } else if(input.tagName == 'INPUT') {
-                        console.log(input);
-                        addValue(key, input.getAttribute('value'));
-                    }
+                    helpers.extractFormValues(input, addValue);
                 }, this);
             }, this);
 
@@ -79,6 +70,8 @@ define([
         },
 
 	      saveAction: function(event) {
+
+            console.log("input values", this.inputValues());
 
             this.contact.setAttributes(this.inputValues());
 
@@ -88,7 +81,7 @@ define([
             } else {
                 this.highlightErrors(this.contact.errors);
             }
-
+            return false;
 	      },
 
         highlightErrors: function() {
@@ -117,6 +110,7 @@ define([
 
 	          // not actually a div, but who cares :-)
 	          this.div = document.createElement('form');
+            this.div.name = 'foo';
 
 	          this.div.appendChild(helpers.div('buttons', [
 		            helpers.button("Cancel", this.closeAction, this),
@@ -131,7 +125,14 @@ define([
 	             this.addInput('n[family-name]');
 	          */
 
-	          this.addTypedInput('email');
+            if(this.contact.email) {
+                _.each(this.contact.email, function(email, i) {
+                    this.addTypedInput('email', undefined, i);
+                }, this);
+            } else {
+	              this.addTypedInput('email', undefined, 0);
+            }
+
 
 	          this.detailsView.div.appendChild(this.div);
 	      },
@@ -167,7 +168,13 @@ define([
 	          this.div.appendChild(input);
 	      },
 
-	      addTypedInput: function(key, parent) {
+	      addTypedInput: function(key, parent, index) {
+            var currentValue;
+            if(this.contact[key]) {
+                currentValue = this.contact[key][index] || {};
+            } else {
+                currentValue = {};
+            }
 	          var isFirst = !parent;
 	          if(! parent) {
 		            parent = document.createElement('div');
@@ -182,11 +189,12 @@ define([
 	          label.setAttribute('for', 'form-input-' + valueKey);
 	          wrapper.appendChild(label);
 	          var typeInput = helpers.input(
-		            this.contact, typeKey, null, 'select', this.types[key]
+		            this.contact, typeKey, null, 'select', this.types[key], currentValue.type
 	          );
 	          helpers.addClass(typeInput, 'short');
 	          wrapper.appendChild(typeInput);
-	          wrapper.appendChild(helpers.input(this.contact, valueKey, null));
+            var valueInput = helpers.input(this.contact, valueKey, null, 'text', null, currentValue.value)
+	          wrapper.appendChild(valueInput);
 
 	          var removeLink = document.createElement('a');
 	          removeLink.setAttribute('href', '#');
@@ -206,10 +214,12 @@ define([
 	          addLink.innerHTML = '+';
 
 	          helpers.catchEvent(addLink, 'click', function() {
-		            this.addTypedInput(key, parent);
+		            this.addTypedInput(key, parent, index + 1);
 	          }, this);
 
 	          wrapper.appendChild(addLink);
+
+            this.registerInput(key, wrapper, wrapper);
 
 	          parent.appendChild(wrapper);
 	      }

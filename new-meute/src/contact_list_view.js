@@ -10,11 +10,13 @@ define([
         setup: function(options) {
 	          console.log('setup contactListView', options);
             this.div = options.div;
+            this.placeholder = this.div.getElementsByClassName('placeholder')[0];
+            // map: { item-uid : div }
+            this._itemDivs = {};
+
             if(options.list) {
                 this.connect(options.list);
             }
-
-            this.place
 
             helpers.addEvent(this.div, 'click', function(event) {
                 if(event.target.tagName == 'A') {
@@ -52,10 +54,33 @@ define([
         },
 
         itemAdded: function(item) {
-            this.div.appendChild(this.renderItem(item));
+            var div = this.renderItem(item)
+            if(! div) {
+                return;
+            }
+            this._itemDivs[item.uid] = div;
+            this.div.appendChild(div);
+        },
+
+        itemRemoved: function(item) {
+            var itemDiv = this._itemDivs[item.uid];
+            if(itemDiv) {
+                this.div.removeChild();
+                delete this._itemDivs[item.uid];
+                if(_.keys(this._itemDivs).length == 0) {
+                    this.placeholder.style.display = 'block';
+                    this.placeholderVisible = true;
+                }
+            }
         },
 
         renderItem: function(item) {
+            console.log('ITEM', item);
+            console.trace();
+            if(item.uid === 'me') {
+                return;
+            }
+            console.log('not me...', item.uid, item);
             if(this.placeholderVisible) {
                 this.placeholder.style.display = 'none';
                 this.placeholderVisible = false;
