@@ -50,10 +50,11 @@ define([
 
             setAttributes: function(attributes) {
                 _.each(attributes, function(value, key) {
+		    console.log('calling setAttribute', value, key);
                     this.setAttribute(key, value);
                 }, this);
+		console.log('after set attributes', this);
             }
-
         };
     }
 
@@ -81,10 +82,8 @@ define([
                 return null;
             }
             return _.extend(
-                {},
-                (attributes instanceof VCard) ?
-                    attributes :
-                    new VCard(attributes),
+                new VCard((attributes instanceof VCard) ?
+			  attributes.toJCard() : attributes),
                 instanceMethods(this)
             );
         },

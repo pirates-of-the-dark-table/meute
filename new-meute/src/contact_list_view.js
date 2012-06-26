@@ -50,7 +50,7 @@ define([
         },
 
         adjustLayout: function() {
-            this.div.style.height = (window.innerHeight - 66) + 'px'
+            this.div.style.height = (window.innerHeight - 61) + 'px'
         },
 
         itemAdded: function(item) {

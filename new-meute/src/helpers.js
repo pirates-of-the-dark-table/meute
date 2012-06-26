@@ -1,6 +1,6 @@
 define(['underscore'], function(_) {
 
-    return {
+    var helpers = {
         // bind event handler for given type to given element.
         // Example:
         //   helpers.addEvent(window, 'load', function(event) {
@@ -92,75 +92,93 @@ define(['underscore'], function(_) {
             element.style.display = 'none';
         },
 
-        div: function(className, content) {
-            var div = document.createElement('div');
-            div.setAttribute('class', className);
-            if(! (content instanceof Array)) {
-                content = [content];
-            }
-            _.each(content, function(part) {
-                if(! part) {
-                    return;
-                }
-                if(typeof(part) == 'string') {
-                    part = document.createTextNode(part);
-                }
-                //console.log('will append part', part, 'to', div);
-                div.appendChild(part);
-            });
-            return div;
-        },
+	dom: {
 
-        input: function(object, name, labelText, type, selectOptions, val) {
-            var label = '';
-            var id = 'form-input-' + name;
-	          var input;
-            if(! val) {
-                val = object[name] || '';
-            }
+            div: function(className, content) {
+		var div = document.createElement('div');
+		div.setAttribute('class', className);
+		if(! (content instanceof Array)) {
+                    content = [content];
+		}
+		_.each(content, function(part) {
+                    if(! part) {
+			return;
+                    }
+                    if(typeof(part) == 'string') {
+			part = document.createTextNode(part);
+                    }
+                    //console.log('will append part', part, 'to', div);
+                    div.appendChild(part);
+		});
+		return div;
+            },
 
-	          if(labelText) {
-		            label = document.createElement('label');
-		            label.innerHTML = labelText;
-		            label.setAttribute('for', id);
-	          }
+	    label: function(text, forValue) {
+		var l = document.createElement('label');
+		l.innerHTML = text;
+		if(forValue) {
+		    l.setAttribute('for', forValue);
+		}
+		return l;
+	    },
 
-	          if(type == 'select') {
-		            input = document.createElement('select');
-		            _.each(selectOptions, function(label, value) {
-		                var option = document.createElement('option');
-		                option.setAttribute('value', value);
-		                option.innerHTML = label;
-		                if(val == value) {
-			                  option.setAttribute('selected', 'selected');
-		                }
-		                input.appendChild(option);
-		            });
-	          } else {
-		            input = document.createElement('input');
-		            input.setAttribute('type', type || 'text');
-		            input.setAttribute('value', val);
-	          }
-	          input.setAttribute('id', id);
-	          input.setAttribute('name', name);
-            return this.div('input', [label, input]);
-        },
+	    // FIXME: This function is becoming aweful to use.
+            input: function(object, name, labelText, type, selectOptions, val, cb) {
+		var label = '';
+		var id = 'form-input-' + name;
+	        var input;
+		if(! val) {
+                    val = object[name] || '';
+		}
 
-	      button: function(label, handler, context, type) {
-	          var input = document.createElement('input');
-	          input.setAttribute('type', type || 'button');
-	          input.setAttribute('value', label);
-	          if(handler) {
-		            this.catchEvent(input, 'click', function(event) {
-		                handler.apply(context || this, [event]);
-		            }, this);
-	          }
-	          return input;
-	      },
+	        if(labelText) {
+		    label = this.label(labelText, id);
+	        }
 
-	      submit: function(label) {
-	          return this.button(label, null, null, 'submit');
-	      },
+	        if(type == 'select') {
+		    input = document.createElement('select');
+		    _.each(selectOptions, function(label, value) {
+		        var option = document.createElement('option');
+		        option.setAttribute('value', value);
+		        option.innerHTML = label;
+		        if(val == value) {
+			    option.setAttribute('selected', 'selected');
+		        }
+		        input.appendChild(option);
+		    });
+	        } else {
+		    input = document.createElement('input');
+		    input.setAttribute('type', type || 'text');
+		    input.setAttribute('value', val);
+	        }
+	        input.setAttribute('id', id);
+	        input.setAttribute('name', name);
+
+		if(cb) {
+		    helpers.addEvent(input, 'blur', cb);
+		    helpers.addEvent(input, 'keyup', cb);
+		}
+
+		return this.div('input', [label, input]);
+            },
+
+	    button: function(label, handler, context, type) {
+	        var input = document.createElement('input');
+	        input.setAttribute('type', type || 'button');
+	        input.setAttribute('value', label);
+	        if(handler) {
+		    helpers.catchEvent(input, 'click', function(event) {
+		        handler.apply(context || this, [event]);
+		    }, helpers);
+	        }
+	        return input;
+	    },
+
+	    submit: function(label) {
+	        return this.button(label, null, null, 'submit');
+	    },
+
+	},
 
         extractFormValues: function(node, cb) {
             if(node.tagName == 'SELECT') {
@@ -178,5 +196,7 @@ define(['underscore'], function(_) {
             }
         }
     };
+
+    return helpers;
 
 });

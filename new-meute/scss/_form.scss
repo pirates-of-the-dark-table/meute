@@ -3,13 +3,13 @@
 form {
 
     .buttons {
-	      margin-bottom: 20px;
+	margin-bottom: 20px;
 
-	      input[type="submit"], input[type="button"] {
+	input[type="submit"], input[type="button"] {
             background-image: -webkit-linear-gradient(#ddd, #ccc);
-	          border: solid 1px #aaa;
-	          height: 30px;
-	          padding: 0 15px;
+	    border: solid 1px #aaa;
+	    height: 30px;
+	    padding: 0 15px;
 
             &[type="submit"] {
                 font-weight: bold;
@@ -23,19 +23,19 @@ form {
                 background-image: -webkit-linear-gradient(#ccc, #ddd);
             }
 
-	          &:first-child {
-		            border-radius: 5px 0 0 5px;
-	          }
+	    &:first-child {
+		border-radius: 5px 0 0 5px;
+	    }
 
-	          &:last-child {
-		            border-radius: 0 5px 5px 0;
-	          }
-	      }
+	    &:last-child {
+		border-radius: 0 5px 5px 0;
+	    }
+	}
     }
 
     .input {
-	      max-width: 350px;
-	      padding: 5px;
+	max-width: 350px;
+	padding: 5px;
 
         .errors {
             color: red;
@@ -43,50 +43,52 @@ form {
             position: absolute;
         }
 
-	      label {
-	          color: #333;
-	          display: block;
-	          font-size: 12px;
-	          font-style: italic;
-	      }
+	label {
+	    color: #333;
+	    display: block;
+	    font-size: 12px;
+	    font-style: italic;
+	}
 
-	      input {
-	          border: solid 1px #333;
-	          width: 198px;
+	&.has-error {
+	    input {
+		border-color: red;
+	    }
+	}
 
-            &.has-error {
-                border-color: red;
-            }
-	      }
+	input {
+	    border: solid 1px #333;
+	    width: 198px;
+	}
 
-	      &.short input {
-	          width: 98px;
-	      }
+	&.short input {
+	    width: 98px;
+	}
 
-	      &.typed {
-	          clear: left;
+	&.typed {
+	    clear: left;
 
-	          .input {
-		            float: left;
-		            padding: 0;
-	          }
+	    .input {
+		float: left;
+		padding: 0;
+	    }
 
-	          a {
-		            display: block;
-		            float: left;
-		            line-height: 15px;
-		            padding: 3px;
-	          }
+	    a {
+		display: block;
+		float: left;
+		line-height: 15px;
+		padding: 3px;
+	    }
 
-	          a.add {
-		            display: none;
-	          }
+	    a.add {
+		display: none;
+	    }
 
-	          &:last-child {
-		            a.add {
-		                display: block;
-		            }
-	          }
-	      }
+	    &:last-child {
+		a.add {
+		    display: block;
+		}
+	    }
+	}
     }
 }
