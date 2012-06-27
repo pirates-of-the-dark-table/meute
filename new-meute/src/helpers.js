@@ -92,93 +92,88 @@ define(['underscore'], function(_) {
             element.style.display = 'none';
         },
 
-	dom: {
+	      dom: {
 
             div: function(className, content) {
-		var div = document.createElement('div');
-		div.setAttribute('class', className);
-		if(! (content instanceof Array)) {
+		            var div = document.createElement('div');
+		            div.setAttribute('class', className);
+		            if(! (content instanceof Array)) {
                     content = [content];
-		}
-		_.each(content, function(part) {
+		            }
+		            _.each(content, function(part) {
                     if(! part) {
-			return;
+			                  return;
                     }
                     if(typeof(part) == 'string') {
-			part = document.createTextNode(part);
+			                  part = document.createTextNode(part);
                     }
                     //console.log('will append part', part, 'to', div);
                     div.appendChild(part);
-		});
-		return div;
+		            });
+		            return div;
             },
 
-	    label: function(text, forValue) {
-		var l = document.createElement('label');
-		l.innerHTML = text;
-		if(forValue) {
-		    l.setAttribute('for', forValue);
-		}
-		return l;
-	    },
+	          label: function(text, forValue) {
+		            var l = document.createElement('label');
+		            l.innerHTML = text;
+		            if(forValue) {
+		                l.setAttribute('for', forValue);
+		            }
+		            return l;
+	          },
 
-	    // FIXME: This function is becoming aweful to use.
-            input: function(object, name, labelText, type, selectOptions, val, cb) {
-		var label = '';
-		var id = 'form-input-' + name;
-	        var input;
-		if(! val) {
+	          // FIXME: This function is becoming aweful to use.
+            input: function(object, name, labelText, type, selectOptions, val) {
+		            var label = '';
+		            var id = 'form-input-' + name;
+	              var input;
+		            if(! val) {
                     val = object[name] || '';
-		}
+		            }
 
-	        if(labelText) {
-		    label = this.label(labelText, id);
-	        }
+	              if(labelText) {
+		                label = this.label(labelText, id);
+	              }
 
-	        if(type == 'select') {
-		    input = document.createElement('select');
-		    _.each(selectOptions, function(label, value) {
-		        var option = document.createElement('option');
-		        option.setAttribute('value', value);
-		        option.innerHTML = label;
-		        if(val == value) {
-			    option.setAttribute('selected', 'selected');
-		        }
-		        input.appendChild(option);
-		    });
-	        } else {
-		    input = document.createElement('input');
-		    input.setAttribute('type', type || 'text');
-		    input.setAttribute('value', val);
-	        }
-	        input.setAttribute('id', id);
-	        input.setAttribute('name', name);
+	              if(type == 'select') {
+		                input = document.createElement('select');
+		                _.each(selectOptions, function(label, value) {
+		                    var option = document.createElement('option');
+		                    option.setAttribute('value', value);
+		                    option.innerHTML = label;
+		                    if(val == value) {
+			                      option.setAttribute('selected', 'selected');
+		                    }
+		                    input.appendChild(option);
+		                });
+	              } else {
+		                input = document.createElement('input');
+		                input.setAttribute('type', type || 'text');
+		                input.setAttribute('value', val);
+	              }
+	              input.setAttribute('id', id);
+	              input.setAttribute('name', name);
 
-		if(cb) {
-		    helpers.addEvent(input, 'blur', cb);
-		    helpers.addEvent(input, 'keyup', cb);
-		}
-
-		return this.div('input', [label, input]);
+		            return this.div('input', [label, input]);
             },
 
-	    button: function(label, handler, context, type) {
-	        var input = document.createElement('input');
-	        input.setAttribute('type', type || 'button');
-	        input.setAttribute('value', label);
-	        if(handler) {
-		    helpers.catchEvent(input, 'click', function(event) {
-		        handler.apply(context || this, [event]);
-		    }, helpers);
-	        }
-	        return input;
-	    },
+	          button: function(label, handler, context, type) {
+	              var input = document.createElement('input');
+	              input.setAttribute('type', type || 'button');
+	              input.setAttribute('value', label);
+	              if(handler) {
+		                helpers.catchEvent(input, 'click', function(event) {
+		                    handler.apply(context || this, [event]);
+		                }, helpers);
+	              }
+	              return input;
+	          },
 
-	    submit: function(label) {
-	        return this.button(label, null, null, 'submit');
-	    },
+	          submit: function(label) {
+	              return this.button(label, null, null, 'submit');
+	          },
 
-	},
+	      },
 
         extractFormValues: function(node, cb) {
             if(node.tagName == 'SELECT') {

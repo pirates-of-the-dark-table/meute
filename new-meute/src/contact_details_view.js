@@ -128,27 +128,27 @@ define([
         renderBasic: function() {
             var props = [];
 
-            props.push(helpers.div('fn', this.contact.fn));
+            props.push(helpers.dom.div('fn', this.contact.fn));
 
             if(this.contact.org) {
                 var o = this.contact.org;
                 var on = o['organization-name'];
                 var ou = o['organization-unit'];
-                var org = helpers.div('org');
+                var org = helpers.dom.div('org');
                 if(on) {
-                    org.appendChild(helpers.div('organization-name', on));
+                    org.appendChild(helpers.dom.div('organization-name', on));
                 }
                 if(on && ou) {
                     org.appendChild(document.createTextNode(', '));
                 }
                 if(ou) {
-                    org.appendChild(helpers.div('organization-unit', ou));
+                    org.appendChild(helpers.dom.div('organization-unit', ou));
                 }
 
                 props.push(org);
             }
 
-            this.div.appendChild(helpers.div('basic', props));
+            this.div.appendChild(helpers.dom.div('basic', props));
         },
 
         renderContactInformation: function() {
@@ -161,13 +161,13 @@ define([
             parts.push(header);
 
             _.each(this.contact.email, function(email) {
-                parts.push(helpers.div('email', [
-                    helpers.div('type', email.type),
-                    helpers.div('value', email.value)
+                parts.push(helpers.dom.div('email', [
+                    helpers.dom.div('type', email.type),
+                    helpers.dom.div('value', email.value)
                 ]));
             }, this);
 
-            this.div.appendChild(helpers.div('contact-information', parts));
+            this.div.appendChild(helpers.dom.div('contact-information', parts));
         },
 
     });
