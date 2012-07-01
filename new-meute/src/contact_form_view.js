@@ -24,6 +24,7 @@ define([
 
 	      closeAction: function(event) {
 	          if(this.contact.fn) {
+                console.log('detailsView', this.detailsView);
 		            this.detailsView.setState('show');
 	          } else {
 		            helpers.setParams({});
@@ -31,10 +32,21 @@ define([
 	      },
 
 	      saveAction: function(event) {
-            var newContact = this.detailsView.contactList.build();
+            var newContact = this.detailsView.contactList.build({
+                uid: this.contact.uid,
+                rev: this.contact.rev
+            });
+
+            console.log("SAVING FROM INPUTS", this.inputs);
+            // return;
+
             _.each(this.inputs, function(inputs, key) {
                 _.each(inputs, function(input) {
+                    if(! input) {
+                        return;
+                    }
                     newContact.addAttribute(key, input.valueFunction());
+                    console.log('ADD ATTRIBUTE', newContact.toJSON());
                 });
             });
 
@@ -43,7 +55,7 @@ define([
             this.contact = newContact.save();
 
             if(this.contact.errors.length <= 0) {
-								this.detailsView = this.contact;
+								this.detailsView.contact = this.contact;
                 Meute.displayInfo("Saved.");
                 this.closeAction();
             } else {
@@ -79,12 +91,13 @@ define([
 	      render: function(detailsView) {
 	          this.detailsView = detailsView;
 	          this.contact = this.detailsView.contact;
+            this.inputs = {};
 
 	          // not actually a div, but who cares :-)
 	          this.div = document.createElement('form');
 
 	          this.div.appendChild(helpers.dom.div('buttons', [
-		            helpers.dom.button("Cancel", this.closeAction, this),
+		            helpers.dom.button("&laquo; Back", this.closeAction, this),
 		            helpers.dom.submit("Save")
 	          ]));
 
@@ -96,12 +109,14 @@ define([
 	             this.addInput('n[family-name]');
 	          */
 
+            var emailWrapper = document.createElement('div');
+            this.div.appendChild(emailWrapper);
             if(this.contact.email) {
                 _.each(this.contact.email, function(email, i) {
-                    this.addTypedInput('email', undefined, i);
+                    this.addTypedInput('email', emailWrapper, i);
                 }, this);
             } else {
-	              this.addTypedInput('email', undefined, 0);
+	              this.addTypedInput('email', emailWrapper, 0);
             }
 
 
@@ -109,9 +124,6 @@ define([
 	      },
 
         registerInput: function(key, wrapper, valueFunction) {
-            if(! this.inputs) {
-                this.inputs = {};
-            }
             if(! (key in this.inputs)) {
                 this.inputs[key] = [];
             }
@@ -138,11 +150,6 @@ define([
             } else {
                 currentValue = {};
             }
-	          var isFirst = !parent;
-	          if(! parent) {
-		            parent = document.createElement('div');
-		            this.div.appendChild(parent);
-	          }
 	          var wrapper = document.createElement('div');
 	          var typeKey = key + '[type]', valueKey = key + '[value]';
 	          helpers.addClass(wrapper, 'input');
@@ -164,9 +171,10 @@ define([
 	          removeLink.innerHTML = 'x';
 	          helpers.catchEvent(removeLink, 'click', function() {
 		            parent.removeChild(wrapper);
+                delete this.inputs[key][index];
 	          }, this);
 
-	          if(! isFirst) {
+	          if(! index == 0) {
 		            wrapper.appendChild(removeLink);
 	          }
 

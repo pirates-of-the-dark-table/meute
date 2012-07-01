@@ -36,7 +36,7 @@ define([
 
     var ContactList = function() {
         this._bindings = {};
-        this.items = [];
+        this.items = {};
     }
 
     // returns a set of instance methods for a VCard instance.
@@ -50,10 +50,8 @@ define([
 
             setAttributes: function(attributes) {
                 _.each(attributes, function(value, key) {
-		    console.log('calling setAttribute', value, key);
                     this.setAttribute(key, value);
                 }, this);
-		console.log('after set attributes', this);
             }
         };
     }
@@ -62,7 +60,7 @@ define([
 
         // add given contact to this list and trigger the 'add' event.
         add: function(contact) {
-            this.items.push(contact);
+            this.items[contact.uid] = contact;
             this.trigger('add', [contact]);
         },
 
@@ -100,8 +98,11 @@ define([
             var item = this._wrap(attributes);
             if(item.validate()) {
                 syncer.setItem('contacts', item.uid, item.toJCard());
-                // FIXME: don't do this if we already have the item.
-                this.add(item);
+                if(item.uid in this.items) {
+                    this.trigger('update', [item]);
+                } else {
+                    this.add(item);
+                }
             } else {
                 console.error("Item has errors:", item.errors);
             }
@@ -112,7 +113,7 @@ define([
         // TODO: add undo.
         destroy: function(contact) {
             syncer.removeItem('contacts', contact.uid);
-            this.items = _.without(this.items, contact);
+            delete this.items[contact.uid];
             this.trigger('remove', [contact]);
         },
 

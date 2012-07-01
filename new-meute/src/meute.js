@@ -93,7 +93,6 @@ define([
         loadContact: function(uid) {
             var item = this.contactList.get(uid);
             contactDetailsView.connect(item);
-            contactDetailsView.setTitle(item.fn);
             contactListView.setActive(item);
         },
 

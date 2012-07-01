@@ -45,6 +45,7 @@ define([
 
             contactList.bind('contactListView', this, {
                 add: this.itemAdded,
+                update: this.itemUpdated,
                 remove: this.itemRemoved
             });
         },
@@ -54,6 +55,9 @@ define([
         },
 
         itemAdded: function(item) {
+            if(item.uid in this._itemDivs) {
+                return;
+            }
             var div = this.renderItem(item)
             if(! div) {
                 return;
@@ -65,7 +69,7 @@ define([
         itemRemoved: function(item) {
             var itemDiv = this._itemDivs[item.uid];
             if(itemDiv) {
-                this.div.removeChild();
+                this.div.removeChild(itemDiv);
                 delete this._itemDivs[item.uid];
                 if(_.keys(this._itemDivs).length == 0) {
                     this.placeholder.style.display = 'block';
@@ -74,19 +78,29 @@ define([
             }
         },
 
-        renderItem: function(item) {
+        itemUpdated: function(item) {
+            var itemDiv = this._itemDivs[item.uid];
+            if(itemDiv) {
+                var isActive = helpers.hasClass(itemDiv, 'active');
+                itemDiv.innerHTML = '';
+                this.renderItem(item, itemDiv);
+            }
+        },
+
+        renderItem: function(item, row) {
             console.log('ITEM', item);
             console.trace();
             if(item.uid === 'me') {
                 return;
             }
-            console.log('not me...', item.uid, item);
             if(this.placeholderVisible) {
                 this.placeholder.style.display = 'none';
                 this.placeholderVisible = false;
             }
-            var row = document.createElement('div');
-            row.setAttribute('class', 'row');
+            if(! row) {
+                row = document.createElement('div');
+                row.setAttribute('class', 'row');
+            }
             var img = document.createElement('img');
             img.setAttribute('class', 'icon');
             if(item.photo) {
@@ -102,15 +116,22 @@ define([
         },
 
         setActive: function(item) {
-            _.each(this.div.getElementsByClassName('row'), function(row) {
-                helpers.removeClass(row, 'active');
+            if(! item) {
+                return;
+            }
+            var row = this._itemDivs[item.uid];
 
-                var link = row.getElementsByTagName('a')[0];
+            if(! row) {
+                return;
+            }
 
-                if(link.getAttribute('data-contact-id') == item.uid) {
-                    helpers.addClass(row, 'active');
-                }
-            }, this);
+            helpers.removeClass(row, 'active');
+
+            var link = row.getElementsByTagName('a')[0];
+
+            if(link.getAttribute('data-contact-id') == item.uid) {
+                helpers.addClass(row, 'active');
+            }
         }
 
     });

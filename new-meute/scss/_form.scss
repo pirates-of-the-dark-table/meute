@@ -1,41 +1,75 @@
 /* -*- mode:css-*- */
 
+@mixin button-style {
+    background-image: -webkit-linear-gradient(#ddd, #ccc);
+	  border: solid 1px #aaa;
+		border-radius: 5px;
+	  height: 30px;
+    padding: 0 15px;
+
+    &[type="submit"] {
+        font-weight: bold;
+    }
+
+    &:hover {
+        background-image: -webkit-linear-gradient(#eee, #ddd);
+    }
+
+    &:active {
+        background-image: -webkit-linear-gradient(#ccc, #ddd);
+    }
+};
+
+button.action {
+    @include button-style;
+}
+
+.error-message {
+    font-style: italic;
+    color: #333;
+}
+
+.button-group {
+    margin-bottom: 20px;
+
+    input[type="submit"], input[type="button"], button {
+        @include button-style;
+
+        border-radius: 0;
+
+	      &:first-child {
+		        border-radius: 5px 0 0 5px;
+	      }
+
+	      &:last-child {
+		        border-radius: 0 5px 5px 0;
+	      }
+    }
+}
+
 form {
 
     .buttons {
-	margin-bottom: 20px;
+	      margin-bottom: 20px;
 
-	input[type="submit"], input[type="button"] {
-            background-image: -webkit-linear-gradient(#ddd, #ccc);
-	    border: solid 1px #aaa;
-	    height: 30px;
-	    padding: 0 15px;
+	      input[type="submit"], input[type="button"], button {
+            @include button-style;
 
-            &[type="submit"] {
-                font-weight: bold;
-            }
+            border-radius: 0;
 
-            &:hover {
-                background-image: -webkit-linear-gradient(#eee, #ddd);
-            }
+	          &:first-child {
+		            border-radius: 5px 0 0 5px;
+	          }
 
-            &:active {
-                background-image: -webkit-linear-gradient(#ccc, #ddd);
-            }
-
-	    &:first-child {
-		border-radius: 5px 0 0 5px;
-	    }
-
-	    &:last-child {
-		border-radius: 0 5px 5px 0;
-	    }
-	}
+	          &:last-child {
+		            border-radius: 0 5px 5px 0;
+	          }
+	      }
     }
 
     .input {
-	max-width: 350px;
-	padding: 5px;
+	      max-width: 350px;
+	      padding: 5px;
 
         .errors {
             color: red;
@@ -43,52 +77,52 @@ form {
             position: absolute;
         }
 
-	label {
-	    color: #333;
-	    display: block;
-	    font-size: 12px;
-	    font-style: italic;
-	}
+	      label {
+	          color: #333;
+	          display: block;
+	          font-size: 12px;
+	          font-style: italic;
+	      }
 
-	&.has-error {
-	    input {
-		border-color: red;
-	    }
-	}
+	      &.has-error {
+	          input {
+		            border-color: red;
+	          }
+	      }
 
-	input {
-	    border: solid 1px #333;
-	    width: 198px;
-	}
+	      input {
+	          border: solid 1px #333;
+	          width: 198px;
+	      }
 
-	&.short input {
-	    width: 98px;
-	}
+	      &.short input {
+	          width: 98px;
+	      }
 
-	&.typed {
-	    clear: left;
+	      &.typed {
+	          clear: left;
 
-	    .input {
-		float: left;
-		padding: 0;
-	    }
+	          .input {
+		            float: left;
+		            padding: 0;
+	          }
 
-	    a {
-		display: block;
-		float: left;
-		line-height: 15px;
-		padding: 3px;
-	    }
+	          a {
+		            display: block;
+		            float: left;
+		            line-height: 15px;
+		            padding: 3px;
+	          }
 
-	    a.add {
-		display: none;
-	    }
+	          a.add {
+		            display: none;
+	          }
 
-	    &:last-child {
-		a.add {
-		    display: block;
-		}
-	    }
-	}
+	          &:last-child {
+		            a.add {
+		                display: block;
+		            }
+	          }
+	      }
     }
 }

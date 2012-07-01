@@ -12,8 +12,6 @@ define([
         setup: function(options) {
             this.contactList = options.list;
             this.div = options.div;
-	          this.titleDiv = document.createElement('div');
-	          helpers.addClass(this.titleDiv, 'title');
         },
 
         // connect this view to the given contact.
@@ -22,6 +20,10 @@ define([
         // this may jump to the "edit" state, if the given contact isn't
         // valid (such as "new").
         connect: function(contact) {
+            if(! contact) {
+                this.renderNotFound();
+                return;
+            }
             if(this.contact) {
                 this.disconnect();
             }
@@ -39,28 +41,27 @@ define([
             this.contact = null;
         },
 
-	      setTitle: function(title) {
-	          this.titleDiv.innerHTML = title;
-	      },
-
 	      setState: function(state) {
 	          this.state = state;
 	          this.render();
 	      },
 
+        renderNotFound: function() {
+            this.div.innerHTML = '';
+            this.div.appendChild(helpers.dom.div(
+                'error-message', [ 'This contact is no more. It may have been deleted or you may have logged out.' ]
+            ));
+        },
+
         render: function() {
             this.div.innerHTML = '';
 
-	          this.div.appendChild(this.titleDiv);
-
-            this.renderDeleteButton();
-
+            this.renderButtons();
+            
             switch(this.state) {
             case 'show':
-                this.renderPicture();
                 this.renderBasic();
                 this.renderContactInformation();
-                this.renderEditButton();
                 break;
             case 'edit':
                 this.renderForm();
@@ -81,15 +82,41 @@ define([
             this.contact.addAttribute(key, value);
         },
 
+        renderButtons: function() {
+
+            var buttons = new ButtonGroup();
+
+            if(state == 'edit') {
+                this.renderSaveButton()
+            } else {
+                this.renderEditButton
+            }
+
+            this.div.appendChild(helpers.dom.div('button-group', [
+
+                ( (this.state == 'edit') ?
+                  this.renderSaveButton() :
+                  this.renderEditButton() ),
+
+                ( (this.contact.uid) &&
+                  this.renderDeleteButton() ),
+
+                ( (! ('photo' in this.contact)) &&
+                  this.renderAddPictureButton())
+
+            ]));
+        },
+
         renderEditButton: function() {
             var button = document.createElement('button');
             helpers.addClass(button, 'edit');
             button.innerHTML = 'Edit';
             button.setAttribute('title', 'Edit details');
+            helpers.addClass(button, 'action');
             helpers.addEvent(button, 'click', function() {
                 this.setState('edit');
             }, this);
-            this.div.appendChild(button);
+            return button;
         },
 
         renderDeleteButton: function() {
@@ -97,8 +124,23 @@ define([
             helpers.addClass(button, 'delete');
             button.innerHTML = "Delete";
 						button.setAttribute('title', "Delete this contact.");
+            helpers.addClass(button, 'action');
             helpers.addEvent(button, 'click', this.deleteContact, this);
-            this.div.appendChild(button);
+            return button;
+        },
+
+        renderAddPictureButton: function() {
+            var button = document.createElement('button');
+            helpers.addClass(button, 'add-picture');
+            button.innerHTML = "Add Picture";
+            button.setAttribute('title', "Attach a picture to this contact.");
+            helpers.addClass(button, 'action');
+            helpers.addEvent(button, 'click', this.addPictureDialog, this);
+            return button;
+        },
+
+        renderSaveButton: function() {
+            
         },
 
         deleteContact: function() {

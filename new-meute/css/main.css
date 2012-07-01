@@ -160,22 +160,61 @@ a {
     display: inline; }
 
 /* -*- mode:css-*- */
-form .buttons {
+button.action {
+  background-image: -webkit-linear-gradient(#dddddd, #cccccc);
+  border: solid 1px #aaa;
+  border-radius: 5px;
+  height: 30px;
+  padding: 0 15px; }
+  button.action[type="submit"] {
+    font-weight: bold; }
+  button.action:hover {
+    background-image: -webkit-linear-gradient(#eeeeee, #dddddd); }
+  button.action:active {
+    background-image: -webkit-linear-gradient(#cccccc, #dddddd); }
+
+.error-message {
+  font-style: italic;
+  color: #333; }
+
+.button-group {
   margin-bottom: 20px; }
-  form .buttons input[type="submit"], form .buttons input[type="button"] {
+  .button-group input[type="submit"], .button-group input[type="button"], .button-group button {
     background-image: -webkit-linear-gradient(#dddddd, #cccccc);
     border: solid 1px #aaa;
+    border-radius: 5px;
     height: 30px;
-    padding: 0 15px; }
-    form .buttons input[type="submit"][type="submit"], form .buttons input[type="button"][type="submit"] {
+    padding: 0 15px;
+    border-radius: 0; }
+    .button-group input[type="submit"][type="submit"], .button-group input[type="button"][type="submit"], .button-group button[type="submit"] {
       font-weight: bold; }
-    form .buttons input[type="submit"]:hover, form .buttons input[type="button"]:hover {
+    .button-group input[type="submit"]:hover, .button-group input[type="button"]:hover, .button-group button:hover {
       background-image: -webkit-linear-gradient(#eeeeee, #dddddd); }
-    form .buttons input[type="submit"]:active, form .buttons input[type="button"]:active {
+    .button-group input[type="submit"]:active, .button-group input[type="button"]:active, .button-group button:active {
       background-image: -webkit-linear-gradient(#cccccc, #dddddd); }
-    form .buttons input[type="submit"]:first-child, form .buttons input[type="button"]:first-child {
+    .button-group input[type="submit"]:first-child, .button-group input[type="button"]:first-child, .button-group button:first-child {
       border-radius: 5px 0 0 5px; }
-    form .buttons input[type="submit"]:last-child, form .buttons input[type="button"]:last-child {
+    .button-group input[type="submit"]:last-child, .button-group input[type="button"]:last-child, .button-group button:last-child {
+      border-radius: 0 5px 5px 0; }
+
+form .buttons {
+  margin-bottom: 20px; }
+  form .buttons input[type="submit"], form .buttons input[type="button"], form .buttons button {
+    background-image: -webkit-linear-gradient(#dddddd, #cccccc);
+    border: solid 1px #aaa;
+    border-radius: 5px;
+    height: 30px;
+    padding: 0 15px;
+    border-radius: 0; }
+    form .buttons input[type="submit"][type="submit"], form .buttons input[type="button"][type="submit"], form .buttons button[type="submit"] {
+      font-weight: bold; }
+    form .buttons input[type="submit"]:hover, form .buttons input[type="button"]:hover, form .buttons button:hover {
+      background-image: -webkit-linear-gradient(#eeeeee, #dddddd); }
+    form .buttons input[type="submit"]:active, form .buttons input[type="button"]:active, form .buttons button:active {
+      background-image: -webkit-linear-gradient(#cccccc, #dddddd); }
+    form .buttons input[type="submit"]:first-child, form .buttons input[type="button"]:first-child, form .buttons button:first-child {
+      border-radius: 5px 0 0 5px; }
+    form .buttons input[type="submit"]:last-child, form .buttons input[type="button"]:last-child, form .buttons button:last-child {
       border-radius: 0 5px 5px 0; }
 form .input {
   max-width: 350px;

@@ -67,6 +67,16 @@ define(['underscore'], function(_) {
             elem.setAttribute('class', classNames.join(' '));
         },
 
+        hasClass: function(elem, className) {
+            var result = false;
+            _.each(this.classNames(elem), function(klass) {
+                if(klass == className) {
+                    result = true;
+                }
+            });
+            return result;
+        },
+
         generateParams: function(params) {
             return _.inject(params, function(output, value, key) {
                 var sep = output.length == 0 ? '?' : '&';
@@ -158,20 +168,26 @@ define(['underscore'], function(_) {
             },
 
 	          button: function(label, handler, context, type) {
-	              var input = document.createElement('input');
-	              input.setAttribute('type', type || 'button');
-	              input.setAttribute('value', label);
+	              var button;
+                if(! type) {
+                    button = document.createElement('button');
+	                  button.innerHTML = label;
+                } else {
+                    button = document.createElement('input');
+                    button.setAttribute('type', type); 
+                    button.setAttribute('value', label); 
+                }
 	              if(handler) {
-		                helpers.catchEvent(input, 'click', function(event) {
+		                helpers.catchEvent(button, 'click', function(event) {
 		                    handler.apply(context || this, [event]);
 		                }, helpers);
 	              }
-	              return input;
+	              return button;
 	          },
 
 	          submit: function(label) {
 	              return this.button(label, null, null, 'submit');
-	          },
+	          }
 
 	      },
 
