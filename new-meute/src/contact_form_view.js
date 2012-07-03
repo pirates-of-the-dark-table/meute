@@ -96,11 +96,6 @@ define([
 	          // not actually a div, but who cares :-)
 	          this.div = document.createElement('form');
 
-	          this.div.appendChild(helpers.dom.div('buttons', [
-		            helpers.dom.button("&laquo; Back", this.closeAction, this),
-		            helpers.dom.submit("Save")
-	          ]));
-
 	          helpers.catchEvent(this.div, 'submit', this.saveAction, this);
 
 	          this.addInput('fn');

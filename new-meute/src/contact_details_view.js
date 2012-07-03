@@ -1,7 +1,7 @@
 
 define([
-    'underscore', 'helpers', 'base_view', 'contact_form_view'
-], function(_, helpers, baseView, contactFormView) {
+    'underscore', 'helpers', 'base_view', 'contact_form_view', 'button_group'
+], function(_, helpers, baseView, contactFormView, ButtonGroup) {
 
     return _.extend({}, baseView, {
 
@@ -85,68 +85,46 @@ define([
         renderButtons: function() {
 
             var buttons = new ButtonGroup();
+            if(this.state == 'edit') {
 
-            if(state == 'edit') {
-                this.renderSaveButton()
+                buttons.addButton("Close Editor", {
+                    callback: _.bind(function() {
+                        contactFormView.saveAction(function() {
+                            this.setState('show');
+                        }, this);
+                    }, this)
+                });
+
             } else {
-                this.renderEditButton
+
+                buttons.addButton("Edit", {
+                    title: "Edit details.",
+                    callback: _.bind(function() {
+                        this.setState('edit')
+                    }, this)
+                });
             }
 
-            this.div.appendChild(helpers.dom.div('button-group', [
+            buttons.addButton("Delete", {
+                title: "Delete this contact.",
+                callback: _.bind(this.deleteContact, this)
+            });
 
-                ( (this.state == 'edit') ?
-                  this.renderSaveButton() :
-                  this.renderEditButton() ),
+            buttons.addButton("Add Picture", {
+                title: "Attach a picture to this contact.",
+                callback: _.bind(this.addPictureDialog, this)
+            });
 
-                ( (this.contact.uid) &&
-                  this.renderDeleteButton() ),
-
-                ( (! ('photo' in this.contact)) &&
-                  this.renderAddPictureButton())
-
-            ]));
-        },
-
-        renderEditButton: function() {
-            var button = document.createElement('button');
-            helpers.addClass(button, 'edit');
-            button.innerHTML = 'Edit';
-            button.setAttribute('title', 'Edit details');
-            helpers.addClass(button, 'action');
-            helpers.addEvent(button, 'click', function() {
-                this.setState('edit');
-            }, this);
-            return button;
-        },
-
-        renderDeleteButton: function() {
-            var button = document.createElement('button');
-            helpers.addClass(button, 'delete');
-            button.innerHTML = "Delete";
-						button.setAttribute('title', "Delete this contact.");
-            helpers.addClass(button, 'action');
-            helpers.addEvent(button, 'click', this.deleteContact, this);
-            return button;
-        },
-
-        renderAddPictureButton: function() {
-            var button = document.createElement('button');
-            helpers.addClass(button, 'add-picture');
-            button.innerHTML = "Add Picture";
-            button.setAttribute('title', "Attach a picture to this contact.");
-            helpers.addClass(button, 'action');
-            helpers.addEvent(button, 'click', this.addPictureDialog, this);
-            return button;
-        },
-
-        renderSaveButton: function() {
-            
+            this.div.appendChild(buttons.div);
         },
 
         deleteContact: function() {
             this.contactList.destroy(this.contact);
             this.disconnect(this.contact);
             this.div.innerHTML = '';
+        },
+
+        addPictureDialog: function() {
         },
 
         renderPicture: function() {
