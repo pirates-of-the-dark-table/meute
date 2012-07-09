@@ -1,22 +1,24 @@
 
 require.config({
 
-    baseUrl: 'src',
-    paths: {
-        'underscore' : '../lib/underscore',
-        'vcardjs' : '../lib/vcardjs'
-    }
+  baseUrl: 'src',
+  paths: {
+    'remoteStorage' : '../lib/remoteStorage',
+    'remoteStorage-modules': '../lib/remoteStorage-modules',
+    'underscore'    : '../lib/underscore',
+    'vcardjs'       : '../lib/vcardjs'
+  }
 
 });
 
 require([
-    'meute', 'helpers'
+  'meute', 'helpers'
 ], function(Meute, helpers) {
-    window.Meute = Meute;
+  window.Meute = Meute;
 
-    helpers.addEvent(window, 'popstate', Meute.loadState, Meute);
+  helpers.addEvent(window, 'popstate', Meute.loadState, Meute);
 
-    helpers.addEvent(window, 'load', function() {
-        Meute.initialize();
-    });
+  helpers.addEvent(window, 'load', function() {
+    Meute.initialize();
+  });
 });

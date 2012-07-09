@@ -1,162 +1,164 @@
 
 define([
-    'underscore', 'helpers', 'contact_list',
-    'contact_list_view', 'contact_details_view',
-    'navigation_view'
-], function(_, helpers, ContactList, contactListView,
+  'underscore', 'helpers',
+  'contact_list_view', 'contact_details_view',
+  'navigation_view', 'remoteStorage', 'remoteStorage-modules'
+], function(_, helpers, contactListView,
             contactDetailsView, navigationView) {
-    
-    return {
 
-        ready: false,
+  var contacts = remoteStorage.contacts;
 
-        initialize: function() {
+  var ready = false;
+  
+  return {
 
-            this.contactList = new ContactList();
+    initialize: function() {
 
-            this.infoDiv = document.getElementById('info');
+      this.infoDiv = document.getElementById('info');
 
-            var _this = this;
+      var _this = this;
 
-            navigationView.setup({
-                div: document.getElementById('navigation')
-            });
+      navigationView.setup({
+        div: document.getElementById('navigation')
+      });
 
-            this.setupSyncer();
+      remoteStorage.loadModule('contacts');
 
-            this.setupDragDrop();
+      // this.setupSyncer();
 
-            contactListView.setup({
-                list: this.contactList,
-                div: document.getElementById('contact-list')
-            });
+      this.setupDragDrop();
 
-            contactDetailsView.setup({
-                list: this.contactList,
-                div: document.getElementById('contact')
-            });
+      contactListView.setup({
+        model: remoteStorage.contacts,
+        div: document.getElementById('contact-list')
+      });
 
-            this.setupLayout();
+      contactDetailsView.setup({
+        model: remoteStorage.contacts,
+        div: document.getElementById('contact')
+      });
 
-            this.ready = true;
+      this.setupLayout();
 
-            this.loadState();
+      ready = true;
 
-        },
+      this.loadState();
 
-        setupSyncer: function() {
-            syncer.display(
-                'remotestorage-connect',
-                ['contacts'],
-                'syncer/',
-                _.bind(function(event) {
-                    console.log('syncer event', event);
-                    if(event.newValue) {
-                        this.contactList.add(event.newValue);
-                    }
-                }, this)
-            );
-        },
+    },
 
-        loadState: function(event) {
-            if(! this.ready) {
-                console.log('not ready yet');
-                return;
-            }
-            console.log("EVENT", event);
-            var params = helpers.parseParams(document.location.search);
+    // setupSyncer: function() {
+    //     syncer.display(
+    //         'remotestorage-connect',
+    //         ['contacts'],
+    //         'syncer/',
+    //         _.bind(function(event) {
+    //             console.log('syncer event', event);
+    //             if(event.newValue) {
+    //                 this.contactList.add(event.newValue);
+    //             }
+    //         }, this)
+    //     );
+    // },
 
-            console.log("loadState", params);
+    loadState: function(event) {
+      if(! ready) {
+        console.log('not ready yet');
+        return;
+      }
+      console.log("EVENT", event);
+      var params = helpers.parseParams(document.location.search);
 
-            if(! params.action) {
-                params.action = 'list';
-            }
+      console.log("loadState", params);
 
-	          var actionHandler = this.actions[params.action];
-	          if(! actionHandler) {
-		            console.error("Unknown action: ", params.action);
-	          } else {
-		            actionHandler.apply(this, [params]);
-	          }
-        },
+      if(! params.action) {
+        params.action = 'list';
+      }
 
-        setupLayout: function() {
-            helpers.addEvent(window, 'resize', this.adjustLayout, this);
-            helpers.addEvent(window, 'load', this.adjustLayout, this);
-            this.adjustLayout();
-        },
+	    var actionHandler = this.actions[params.action];
+	    if(! actionHandler) {
+		    console.error("Unknown action: ", params.action);
+	    } else {
+		    actionHandler.apply(this, [params]);
+	    }
+    },
 
-        adjustLayout: function() {
-            contactListView.adjustLayout();
-        },
+    setupLayout: function() {
+      helpers.addEvent(window, 'resize', this.adjustLayout, this);
+      helpers.addEvent(window, 'load', this.adjustLayout, this);
+      this.adjustLayout();
+    },
 
-        loadContact: function(uid) {
-            var item = this.contactList.get(uid);
-            contactDetailsView.connect(item);
-            contactListView.setActive(item);
-        },
+    adjustLayout: function() {
+      contactListView.adjustLayout();
+    },
 
-        displayInfo: function(info) {
-            if(info) {
-                this.infoDiv.innerText = info;
-                this.infoDiv.style.display = 'block';
-            } else {
-                this.infoDiv.innerText = '';
-                this.infoDiv.style.display = 'none';
-            }
-        },
+    loadContact: function(uid) {
+      var item = this.contactList.get(uid);
+      contactDetailsView.connect(item);
+      contactListView.setActive(item);
+    },
 
-        setupDragDrop: function() {
-            function hoverInfo(event) {
-                this.displayInfo("Drop your vCards anywhere to add.");
-            }
+    displayInfo: function(info) {
+      if(info) {
+        this.infoDiv.innerText = info;
+        this.infoDiv.style.display = 'block';
+      } else {
+        this.infoDiv.innerText = '';
+        this.infoDiv.style.display = 'none';
+      }
+    },
 
-            helpers.addEvent(document.body, 'dragenter', hoverInfo, this);
-            helpers.addEvent(document.body, 'dragover', hoverInfo, this);
+    setupDragDrop: function() {
+      function hoverInfo(event) {
+        this.displayInfo("Drop your vCards anywhere to add.");
+      }
 
-            helpers.addEvent(document.body, 'dragleave', function(event) {
-                this.displayInfo();
-            }, this);
+      helpers.addEvent(document.body, 'dragenter', hoverInfo, this);
+      helpers.addEvent(document.body, 'dragover', hoverInfo, this);
 
-            helpers.addEvent(document.body, 'drop', function(event) {
-                event.preventDefault();
-                this.displayInfo();
-                this.contactList.addVCards(event.dataTransfer.files);
-            }, this);
-        },
+      helpers.addEvent(document.body, 'dragleave', function(event) {
+        this.displayInfo();
+      }, this);
 
-        actions: {
+      helpers.addEvent(document.body, 'drop', function(event) {
+        event.preventDefault();
+        this.displayInfo();
+        remoteStorage.contacts.addVCards(event.dataTransfer.files);
+      }, this);
+    },
 
-            show: function(params) {
-                this.loadContact(params.id);
-                contactDetailsView.show();
-            },
+    actions: {
 
-            me: function() {
-		            contactDetailsView.setTitle('Me');
-                contactDetailsView.connect(
-                    this.contactList.get('me') || this.contactList.build({
-                        uid: 'me'
-                    })
-                );
-                contactDetailsView.show();
-                navigationView.setActive('me');
-            },
+      show: function(params) {
+        this.loadContact(params.id);
+        contactDetailsView.show();
+      },
 
-            list: function() {
-                contactDetailsView.hide();
-            },
+      me: function() {
+		    contactDetailsView.setTitle('Me');
+        contactDetailsView.connect(
+          this.contactList.get('me') || this.contactList.build({
+            uid: 'me'
+          })
+        );
+        contactDetailsView.show();
+        navigationView.setActive('me');
+      },
 
-	          new: function() {
-		            contactDetailsView.setTitle('New Contact');
-		            contactDetailsView.connect(this.contactList.build());
-		            contactDetailsView.show();
-		            navigationView.setActive('new');
-	          }
+      list: function() {
+        contactDetailsView.hide();
+      },
 
-        }
+	    new: function() {
+		    contactDetailsView.setTitle('New Contact');
+		    contactDetailsView.connect(this.contactList.build());
+		    contactDetailsView.show();
+		    navigationView.setActive('new');
+	    }
 
-    };
+    }
+
+  };
 
 });
 

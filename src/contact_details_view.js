@@ -12,6 +12,7 @@ define([
         setup: function(options) {
             this.contactList = options.list;
             this.div = options.div;
+            this.titleDiv = helpers.dom.div('title');
         },
 
         // connect this view to the given contact.
@@ -36,6 +37,10 @@ define([
             this.render();
         },
 
+        setTitle: function(title) {
+            this.titleDiv.innerHTML = title;
+        },
+
         // disconnect from contact
         disconnect: function() {
             this.contact = null;
@@ -55,6 +60,8 @@ define([
 
         render: function() {
             this.div.innerHTML = '';
+
+            this.div.appendChild(this.titleDiv);
 
             this.renderButtons();
             
